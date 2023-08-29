@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import Style from './AppBar.module.css';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -40,7 +38,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -75,7 +72,6 @@ export default function SearchAppBar() {
           >
             NINEONCE
           </Typography>
-          <Button variant="로그인" className={Style.loginbtn}>로그인</Button>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
