@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
+import Style from './AppBar.module.css';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -73,6 +75,7 @@ export default function SearchAppBar() {
           >
             NINEONCE
           </Typography>
+          <Button variant="로그인" className={Style.loginbtn}>로그인</Button>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />

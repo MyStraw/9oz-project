@@ -30,7 +30,7 @@ export default function RowRadioButtonsGroup() {
             {/* 다른 옵션 추가 */}
           </RadioGroup>
         );
-        case 'onepice':
+        case 'outer':
           return (
             <RadioGroup
               row
@@ -39,10 +39,23 @@ export default function RowRadioButtonsGroup() {
               value={selectedItem}
               onChange={handleItemChange}
             >
-              <FormControlLabel value="tshirt" control={<Radio />} label="원피스" />
+              <FormControlLabel value="jacket" control={<Radio />} label="자켓" />
+              <FormControlLabel value="coat" control={<Radio />} label="코트" />
               {/* 다른 옵션 추가 */}
             </RadioGroup>
           );
+          case 'onepice':
+            return (
+              <RadioGroup
+                row
+                aria-labelledby="item-radio-group-label"
+                name="item-radio-buttons-group"
+                value={selectedItem}
+                onChange={handleItemChange}
+              >
+                <FormControlLabel value="onepiece" control={<Radio />} label="원피스" />
+              </RadioGroup>
+            );
       case 'under':
         return (
           <RadioGroup
@@ -57,6 +70,19 @@ export default function RowRadioButtonsGroup() {
             {/* 다른 옵션 추가 */}
           </RadioGroup>
         );
+        case 'skirt':
+          return (
+            <RadioGroup
+              row
+              aria-labelledby="item-radio-group-label"
+              name="item-radio-buttons-group"
+              value={selectedItem}
+              onChange={handleItemChange}
+            >
+              <FormControlLabel value="short-skirt" control={<Radio />} label="치마" />
+              {/* 다른 옵션 추가 */}
+            </RadioGroup>
+          );
       default:
         return null;
     }
@@ -65,7 +91,7 @@ export default function RowRadioButtonsGroup() {
   return (
     <div>
       <FormControl>
-        <FormLabel id="category-radio-group-label">카테고리 선택</FormLabel>
+        <FormLabel id="category-radio-group-label"></FormLabel>
         <RadioGroup
           row
           aria-labelledby="category-radio-group-label"
@@ -74,8 +100,10 @@ export default function RowRadioButtonsGroup() {
           onChange={handleCategoryChange}
         >
           <FormControlLabel value="upper" control={<Radio />} label="상의" />
+          <FormControlLabel value="outer" control={<Radio />} label="아우터" />
           <FormControlLabel value="onepice" control={<Radio />} label="원피스" />
-          <FormControlLabel value="under" control={<Radio />} label="하의" />
+          <FormControlLabel value="under" control={<Radio />} label="바지" />
+          <FormControlLabel value="skirt" control={<Radio />} label="치마" />
         </RadioGroup>
       </FormControl>
       {renderItems()}
