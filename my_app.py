@@ -5,7 +5,9 @@ from PIL import Image
 from sklearn.cluster import KMeans
 import os
 
+
 app = Flask(__name__)
+
 
 # 모델 로딩
 encoder = load_model('path_to_encoder_model')  # Encoder 모델의 경로
@@ -38,6 +40,6 @@ def find_similar():
     similar_B_filenames = [B_image_files[idx] for idx in similar_B_indices]
 
     return jsonify({'similar_products': similar_B_filenames})
-
+    
 if __name__ == '__main__':
     app.run(port=5000)
