@@ -97,12 +97,11 @@
 - 오토인코더와 군집화 단계에서 많은 시간소요가 우려됨
 
 ### -전체 구성도
-
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6009d6fe-7e55-47b0-8954-fb4ca1dadfb0/Untitled.png)
+<img src = img/전체구성도.png>
 
 ### -화면 (서비스)설계
 
-![해당 디자인은 샘플이며, 개발단계에서 달라질수 있음](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4c891bea-e8c5-42dc-abd5-400b34d1bd7c/Untitled.png)
+<img src = img/화면설계.png>
 
 해당 디자인은 샘플이며, 개발단계에서 달라질수 있음
 
@@ -135,7 +134,7 @@
 | 1 | 모던 | 모던 | 상의 |  | 카키 | 그린 | 탑 | 단추 | 면 | 체크 | 노멀 | 반팔 | 유넥 |  |  |  |
 - 나인온스 상품의 상품코드가 파일명인 상품이미지 데이터셋
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e2e21649-5f70-47e4-a0f6-b449db05b2b9/Untitled.png)
+<img src = img/나인온스상품.png>
 
 - 신상마켓 웹크롤링을 통한 상품이미지 데이터셋
 
@@ -151,23 +150,23 @@
     - **K-fashion**
         - 구조
             
-            ![: 옷 이미지 삽입시 옷의 속성(소재, 길이, 상의, 하의, 분위기 등)을 카테고리 별로 분류](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/82d4186e-7d8d-4e5b-b71e-a2fca2035045/Untitled.png)
+         <img src = img/K-fashion.png>
             
             : 옷 이미지 삽입시 옷의 속성(소재, 길이, 상의, 하의, 분위기 등)을 카테고리 별로 분류
             
         - 속성분류체계 예시
             
-            ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/07b5dfc8-3644-49d9-a381-49b8c4123391/Untitled.png)
+          <img src = img/속성분류체계.png>
             
     - **잠재벡터 & 군집화**
         - 잠재벡터 추출
             
-            ![9jbTB2O.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b8cf771d-2cbe-469b-85e4-477f8d0dc908/9jbTB2O.png)
+            <img src = img/잠재벡터.png>
             
         
         - 군집화
         
-        ![9932C73B5E7F66271D.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c0382447-9716-498e-9ad0-a454a292ca35/9932C73B5E7F66271D.png)
+      <img src = img/군집화.png>
         
 
 ---
