@@ -11,6 +11,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.oz.domain.Image;
@@ -45,8 +46,8 @@ public class ImageController {
     
     @CrossOrigin(origins = "*")
     @GetMapping("/display") //내 로컬의 이미지를 표시하기
-	public ResponseEntity<byte[]> getImage(String fileName){		
-		File file = new File("C:/9ozproject/9OZ_SALES/A17/" + fileName);
+	public ResponseEntity<byte[]> getImage(String imagePath ){		
+		File file = new File(imagePath);
 		
 		ResponseEntity<byte[]> result = null;
 		
@@ -62,5 +63,6 @@ public class ImageController {
 		}
 		return result;		
 	}
+    
 	
 }
