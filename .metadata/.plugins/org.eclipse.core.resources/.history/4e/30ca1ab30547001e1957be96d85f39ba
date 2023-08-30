@@ -1,0 +1,37 @@
+package com.example.oz.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.oz.domain.Image;
+import com.example.oz.repository.ImageRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+public class ImageController {
+	
+	//생성자 주입법 Autowired필드에 쓰지않기
+	private final ImageRepository imageRepo;
+	
+	//전체검색
+	@GetMapping("/list")
+	public Iterable<Image> getImages(){
+		return imageRepo.findAll();
+	}
+	
+	//mainclass로 검색
+	@GetMapping("/list/{mainclass}")
+    public Iterable<Image> getImagesByMainclass(@PathVariable String mainclass) {
+        return imageRepo.findByMainclass(mainclass);
+    }
+
+    // semiclass로 검색
+    @GetMapping("/list/{mainclass}/{semiclass}")
+    public Iterable<Image> getImagesBySemiclass(@PathVariable String mainclass, @PathVariable String semiclass) {
+        return imageRepo.findByMainclassAndSemiclass(mainclass, semiclass);
+    }
+	
+}

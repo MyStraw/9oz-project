@@ -1,0 +1,5 @@
+package com.example.oz.domain;
+
+public class Image {
+
+}
