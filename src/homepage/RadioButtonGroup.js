@@ -1,83 +1,131 @@
 import React, { useState } from 'react';
-import { FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import {
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Button
+} from '@mui/material';
+import Styles from './RadioButtonGroup.module.css';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-export default function RowRadioButtonsGroup() {
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedItem, setSelectedItem] = useState('');
-  const [itemInfo, setItemInfo] = useState(null);
+export default function RadioButtonGroup() {
+  const [selectedCategory, setSelectedCategory] = useState('top');
+  const [selectedSubCategory, setSelectedSubCategory] = useState('tshirt');
+  const [itemData, setItemData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
-    setSelectedItem('');
-    setItemInfo(null);
+    setSelectedSubCategory('');
+    setIsDataLoaded(false);
   };
 
-  const handleItemChange = (event) => {
-    setSelectedItem(event.target.value);
-
-    // 가상의 아이템 데이터에서 아이템 정보 가져오기
-    const itemData = {
-      tshirt: { name: '티셔츠', imageUrl: 'https://example.com/tshirt.jpg', description: '티셔츠 설명' },
-      blouse: { name: '블라우스', imageUrl: 'https://example.com/blouse.jpg', description: '블라우스 설명' },
-      // 다른 아이템 정보 추가
-    };
-
-    setItemInfo(itemData[event.target.value]);
+  const handleSubCategoryChange = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+    setIsDataLoaded(false);
   };
 
-  const renderItems = () => {
+
+  const handleImageClick = (item) => {
+    const requestData = item.image_path;
+    axios.defaults.headers.post['Content-Type'] = 'application/json';
+    axios.get(`http://10.125.121.170:8080/list/${selectedCategory}/${selectedSubCategory}`)
+      .then(response => {
+        const { product_name, product_code, sale_price } = response.data;
+        console.log("Product Name:", product_name);
+        console.log("Product Code:", product_code);
+        console.log("Sale Price:", sale_price);
+
+        const postData = {
+          image_path: requestData
+        };
+
+        axios.post(`http://10.125.121.170:8080/predict`, postData)
+          .then(predictionResponse => {
+            console.log(predictionResponse);
+          })
+          .catch(error => {
+            console.error('Error sending POST request:', error);
+          });
+      })
+      .catch(error => {
+        console.error('Error fetching product info:', error);
+      });
+  };
+
+
+
+
+  const fetchItemData = () => {
+    const dataURL = `http://10.125.121.170:8080/list/${selectedCategory}/${selectedSubCategory}`;
+
+    if (selectedCategory && selectedSubCategory) {
+      setIsLoading(true); // 로딩 시작
+      fetch(dataURL)
+        .then(response => response.json())
+        .then(data => {
+          setItemData(data);
+          setIsDataLoaded(true);
+        })
+        .catch(error => console.error('Fetch Error:', error))
+        .finally(() => setIsLoading(false)); // 로딩 종료
+    }
+  };
+
+
+  const renderSubCategories = () => {
     switch (selectedCategory) {
-      case 'upper':
+      case 'top':
         return (
           <RadioGroup
             row
-            aria-labelledby="item-radio-group-label"
-            name="item-radio-buttons-group"
-            value={selectedItem}
-            onChange={handleItemChange}
+            aria-labelledby="sub-category-radio-group-label"
+            name="sub-category-radio-buttons-group"
+            value={selectedSubCategory}
+            onChange={(event) => handleSubCategoryChange(event.target.value)}
           >
             <FormControlLabel value="tshirt" control={<Radio />} label="티셔츠" />
+            <FormControlLabel value="tshirtsleeveless" control={<Radio />} label="티셔츠나시" />
+            <FormControlLabel value="knit" control={<Radio />} label="니트" />
+            <FormControlLabel value="knitsleeveless" control={<Radio />} label="니트나시" />
             <FormControlLabel value="blouse" control={<Radio />} label="블라우스" />
-            {/* 다른 옵션 추가 */}
+            <FormControlLabel value="blousesleeveless" control={<Radio />} label="블라우스나시" />
+            <FormControlLabel value="shirt" control={<Radio />} label="남방" />
+            <FormControlLabel value="jumper" control={<Radio />} label="점퍼" />
+            <FormControlLabel value="jacket" control={<Radio />} label="자켓" />
           </RadioGroup>
         );
-      case 'under':
+      case 'bottom':
         return (
           <RadioGroup
             row
-            aria-labelledby="item-radio-group-label"
-            name="item-radio-buttons-group"
-            value={selectedItem}
-            onChange={handleItemChange}
+            aria-labelledby="sub-category-radio-group-label"
+            name="sub-category-radio-buttons-group"
+            value={selectedSubCategory}
+            onChange={(event) => handleSubCategoryChange(event.target.value)}
           >
             <FormControlLabel value="pants" control={<Radio />} label="바지" />
-            <FormControlLabel value="shorts" control={<Radio />} label="반바지" />
-            {/* 다른 옵션 추가 */}
+            <FormControlLabel value="denim" control={<Radio />} label="데님" />
+            <FormControlLabel value="skirt" control={<Radio />} label="스커트" />
+            <FormControlLabel value="leggings" control={<Radio />} label="레깅스" />
           </RadioGroup>
         );
       case 'outer':
         return (
           <RadioGroup
             row
-            aria-labelledby="item-radio-group-label"
-            name="item-radio-buttons-group"
-            value={selectedItem}
-            onChange={handleItemChange}
+            aria-labelledby="sub-category-radio-group-label"
+            name="sub-category-radio-buttons-group"
+            value={selectedSubCategory}
+            onChange={(event) => handleSubCategoryChange(event.target.value)}
           >
+
             <FormControlLabel value="jacket" control={<Radio />} label="자켓" />
             <FormControlLabel value="coat" control={<Radio />} label="코트" />
-            {/* 다른 옵션 추가 */}
-          </RadioGroup>
-        );
-      case 'onepice':
-        return (
-          <RadioGroup
-            row
-            aria-labelledby="item-radio-group-label"
-            name="item-radio-buttons-group"
-            value={selectedItem}
-            onChange={handleItemChange}
-          >
             <FormControlLabel value="onepiece" control={<Radio />} label="원피스" />
           </RadioGroup>
         );
@@ -86,32 +134,55 @@ export default function RowRadioButtonsGroup() {
     }
   };
 
-  return (
-    <div>
-      <FormControl>
-        <FormLabel id="category-radio-group-label"></FormLabel>
-        <RadioGroup
-          row
-          aria-labelledby="category-radio-group-label"
-          name="category-radio-buttons-group"
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-        >
-          <FormControlLabel value="upper" control={<Radio />} label="상의" />
-          <FormControlLabel value="under" control={<Radio />} label="하의" />
-          <FormControlLabel value="outer" control={<Radio />} label="아우터" />
-          <FormControlLabel value="onepice" control={<Radio />} label="원피스" />
-        </RadioGroup>
-      </FormControl>
-      {renderItems()}
 
-      {itemInfo && (
-        <div>
-          <p>선택된 아이템: {itemInfo.name}</p>
-          <img src={itemInfo.imageUrl} alt={itemInfo.name} />
-          <p>{itemInfo.description}</p>
+  return (
+    <>
+      <div className={Styles.category_select}>
+        <FormControl>
+          <FormLabel id="category-radio-group-label">카테고리 선택</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="category-radio-group-label"
+            name="category-radio-buttons-group"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className={Styles.radio_group}
+          >
+            <FormControlLabel value="top" control={<Radio />} label="상의" />
+            <FormControlLabel value="bottom" control={<Radio />} label="하의" />
+            <FormControlLabel value="outer" control={<Radio />} label="아우터" />
+          </RadioGroup>
+        </FormControl>
+      </div>
+      <div>
+        {renderSubCategories()}
+      </div>
+      <Button onClick={fetchItemData}>데이터 가져오기</Button>
+      {isDataLoaded &&
+        <div className={Styles.imageGroupContainer}>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            itemData.map((item) => (
+              <div key={item.product_code} className={Styles.imageGroupItem}>
+                <Link to="#" onClick={() => handleImageClick(item)}>
+                  <img
+                    src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.image_path)}`}
+                    alt='나인오즈 이미지'
+                    onError={(e) => {
+                      e.target.src = process.env.PUBLIC_URL + '/none.png';
+                    }}
+                    className={Styles.nineozimg}
+                  />
+                  <p>{item.product_name}</p>
+                  <p>{item.product_code}</p>
+                  <p>{item.sale_price}</p>
+                </Link>
+              </div>
+            ))
+          )}
         </div>
-      )}
-    </div>
+      }
+    </>
   );
 }

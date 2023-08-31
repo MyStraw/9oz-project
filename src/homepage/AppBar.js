@@ -17,7 +17,7 @@ const Search = styled('div')(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: '100%',
+  width: '700px',
   [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(1),
     width: 'auto',
@@ -40,15 +40,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '700px',
     [theme.breakpoints.up('sm')]: {
-      width: '12ch',
+      width: '25ch',
       '&:focus': {
-        width: '20ch',
+        width: '35ch',
       },
     },
   },
 }));
+
 
 export default function SearchAppBar() {
   return (
@@ -77,7 +78,7 @@ export default function SearchAppBar() {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="상품명, 상품코드 입력"
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
