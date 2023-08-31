@@ -27,7 +27,7 @@ public class SecurityConfig {
 	@Bean // 0807 추가. 프론트에서 로그인. CORS 설정위한 메소드. 다른 도메인의 요청 허용을 사용자가 설정.
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration(); //CORS 설정위한 객체 생성
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 허용 도메인(출처, origin) 설정. 3000만 허용.
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5000")); // 허용 도메인(출처, origin) 설정. 3000만 허용.
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); //options는 왜있는겨. 지워.
 		configuration.setAllowedHeaders(Arrays.asList("*")); //모든 헤더 허용
 		configuration.setAllowCredentials(true); //자격증명(쿠키, HTTP인증) 요청 허용.

@@ -17,15 +17,30 @@ import lombok.Setter;
 @Table(name="codeclass")
 public class Image {
 	@Id
+	@Column(nullable = false)
 	private Long id;
+
+	@Column(nullable = false)
 	private String product_code;
+
+	@Column(nullable = false)
 	private String product_name;
+
+	@Column(nullable = false)
 	private String color_name;
+
+	@Column(nullable = false)
 	private String size;
+
+	@Column(nullable = false)
 	private String sale_price;
+
+	@Column(nullable = false)
 	private String mainclass;
+
+	@Column(nullable = false)
 	private String semiclass;
-	@Column(length=1000)
+
+	@Column(length=1000, nullable = false)
 	private String image_path;
-	
 }
