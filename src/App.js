@@ -21,10 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={
             <>
-              <RadioButtonGroup
-                onCategoryChange={setSelectedCategory}
-                onSubCategoryChange={setSelectedSubCategory}
-              />
+              <RadioButtonGroup onCategoryChange={setSelectedCategory} onSubCategoryChange={setSelectedSubCategory}/>
             </>} />
           </Routes>
         </div>
