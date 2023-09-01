@@ -8,6 +8,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 
-import com.example.oz.domain.Image;
+import com.example.oz.domain.ProductImage;
 import com.example.oz.repository.ImageRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -35,22 +38,46 @@ public class ImageController {
 	
 	//전체검색
 	@GetMapping("/list")
-	public Iterable<Image> getImages(){
+	public Iterable<ProductImage> getImages(){
 		return imageRepo.findAll();
 	}
 	
 	//mainclass로 검색
 	@GetMapping("/list/{mainclass}")
-    public Iterable<Image> getImagesByMainclass(@PathVariable String mainclass) {
+    public Iterable<ProductImage> getImagesByMainclass(@PathVariable String mainclass) {
         return imageRepo.findByMainclass(mainclass);
     }
 
     // semiclass로 검색
     @GetMapping("/list/{mainclass}/{semiclass}")
-    public Iterable<Image> getImagesBySemiclass(@PathVariable String mainclass, @PathVariable String semiclass) {
+    public Iterable<ProductImage> getImagesBySemiclass(@PathVariable String mainclass, @PathVariable String semiclass) {
         return imageRepo.findByMainclassAndSemiclass(mainclass, semiclass);
     }
     
+ // product_code 또는 product_name으로 검색
+    @GetMapping("/search")
+    public Iterable<ProductImage> getImagesByQuery(@RequestParam String query) {
+        Iterable<ProductImage> results;
+
+        // 먼저 product_code로 검색
+        results = imageRepo.findByProductCode(query);
+        
+        if (!results.iterator().hasNext()) {  // 결과가 비어있는지 확인
+            // product_name으로 검색
+            results = imageRepo.findByProductName(query);
+        }
+        
+        if (!results.iterator().hasNext()) {  // 결과가 비어있는지 확인
+            throw new ResponseStatusException(
+                  HttpStatus.NOT_FOUND, "No matching product_code or product_name found");
+        }
+        
+        return results;
+    }
+
+
+
+   
     
     @GetMapping("/display") //내 로컬의 이미지를 표시하기
 	public ResponseEntity<byte[]> getImage(String imagePath){		

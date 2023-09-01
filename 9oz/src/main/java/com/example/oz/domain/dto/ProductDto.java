@@ -1,39 +1,36 @@
-package com.example.oz.domain;
+package com.example.oz.domain.dto;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="codeclass")
-public class Image {
+public class ProductDto {
+
 	@Id
 	@Column(nullable = false)
 	private Long id;
 
 	@Column(nullable = false)
-	private String product_code;
+	private String productCode;
 
 	@Column(nullable = false)
-	private String product_name;
+	private String productName;
 
 	@Column(nullable = false)
-	private String color_name;
+	private String colorName;
 
 	@Column(nullable = false)
 	private String size;
 
 	@Column(nullable = false)
-	private String sale_price;
+	private String salePrice;
 
 	@Column(nullable = false)
 	private String mainclass;
@@ -42,5 +39,5 @@ public class Image {
 	private String semiclass;
 
 	@Column(length=1000, nullable = false)
-	private String image_path;
+	private String imagePath;
 }
