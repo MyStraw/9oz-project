@@ -33,7 +33,7 @@ public class ProductImage {
 	private String size;
 
 	@Column(nullable = false)
-	private String salePrice;
+	private Integer salePrice;
 
 	@Column(nullable = false)
 	private String mainclass;
@@ -43,4 +43,9 @@ public class ProductImage {
 
 	@Column(length=1000, nullable = false)
 	private String imagePath;
+	
+	@Column(nullable = false)
+	private Integer totalsale;
+	
+	
 }
