@@ -17,11 +17,11 @@ const SelectMenu = () => {
       <NativeSelect
         defaultValue="판매량순"
         inputProps={{
-          name: 'age',
+          name: 'sales',
           id: 'uncontrolled-native',
         }}
         onChange={handleSortChange}
-        className={styles.select} // CSS 클래스 적용
+        size="small"
       >
         <option value="판매량순">판매량순</option>
         <option value="상품명">상품명</option>

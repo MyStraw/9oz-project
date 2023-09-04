@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Styles from './TableSelection.module.css';
 import SelectMenu from '../components/SelectMenu'
+import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
+import Doughnutchart from '../charts/Doughnutchart'
 import axios from 'axios';
 
 const TableSelection = () => {
     const StyledBox = styled(Box)`
-    & button {
-        m: 1;
-        width: 280px;
-        height: 60px;
-        font-size: 20px;
-        &:focus {
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+        & button {
+            m: 1;
+            width: 280px;
+            height: 60px;
+            font-size: 20px;
+            &:focus {
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+            }
+            color: black;
         }
-        color: black;
-    }
-`;
+    `;
+
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);
     const [itemData, setItemData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(''); // 추가: 검색어 상태
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         setSelectedSubCategory(null);
-        // setItemData([]);
-        // setIsDataLoaded(false);
     };
 
     const handleSubCategorySelect = (subCategory) => {
         setSelectedSubCategory(subCategory);
-        setItemData([]); // 기존 데이터 초기화
+        setItemData([]);
         setIsDataLoaded(false);
 
         const dataURL = `http://10.125.121.170:8080/list/${selectedCategory}/${subCategory}`;
 
         if (selectedCategory && subCategory) {
-            setIsLoading(true); // 로딩 시작
+            setIsLoading(true);
             fetch(dataURL)
                 .then(response => response.json())
                 .then(data => {
@@ -49,30 +51,28 @@ const TableSelection = () => {
                     setIsDataLoaded(true);
                 })
                 .catch(error => console.error('Fetch Error:', error))
-                .finally(() => setIsLoading(false)); // 로딩 종료
+                .finally(() => setIsLoading(false));
         }
     };
 
     const handleImageClick = (item) => {
-        const requestData = item.image_path;
-        axios.defaults.headers.post['Content-Type'] = 'application/json';
+        const requestData = {
+            imagePath: item.imagePath,
+        };
+
         axios.get(`http://10.125.121.170:8080/list/${selectedCategory}/${selectedSubCategory}`)
             .then(response => {
-                const { product_name, product_code, sale_price } = response.data;
-                console.log("Product Name:", product_name);
-                console.log("Product Code:", product_code);
-                console.log("Sale Price:", sale_price);
+                const { productName, productCode, salePrice } = response.data;
+                console.log("ProductName:", productName);
+                console.log("ProductCode:", productCode);
+                console.log("SalePrice:", salePrice);
 
-                const postData = {
-                    image_path: requestData
-                };
-
-                axios.post(`http://10.125.121.170:8080/predict`, postData)
+                axios.post(`http://10.125.121.170:8080/predict`, JSON.stringify(requestData))
                     .then(predictionResponse => {
                         console.log(predictionResponse);
                     })
                     .catch(error => {
-                        console.error('Error sending POST request:', error);
+                        console.error(error);
                     });
             })
             .catch(error => {
@@ -80,6 +80,39 @@ const TableSelection = () => {
             });
     };
 
+
+
+    const handleSearch = () => {
+        if (!searchQuery.trim()) {
+            return;
+        }
+
+        const searchUrl = `http://10.125.121.170:8080/search?query=${encodeURIComponent(searchQuery)}`;
+
+        axios.get(searchUrl)
+            .then(response => {
+                const data = response.data;
+                console.log('검색 결과:', data);
+
+                const products = data.map(item => ({
+                    productCode: item.productCode,
+                    productName: item.productName,
+                    salePrice: item.salePrice,
+                    imagePath: item.imagePath,
+                }));
+
+                setItemData(products);
+                setIsDataLoaded(true);
+            })
+            .catch(error => {
+                console.error('API 요청 오류:', error);
+            });
+    };
+
+    useEffect(() => {
+        // 검색어가 변경될 때 검색 함수를 호출
+        handleSearch();
+    }, [searchQuery]);
 
     const renderCategoryButtons = () => {
         return (
@@ -91,7 +124,6 @@ const TableSelection = () => {
             </StyledBox>
         );
     };
-
 
     const renderSubCategories = () => {
         return (
@@ -124,20 +156,22 @@ const TableSelection = () => {
         );
     };
 
-
     return (
         <>
+            <div className={Styles.main_input}>
+                <div className={Styles.searchContainer}>
+                    <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} />
+                </div>
+                <SelectMenu />
+            </div>
             <div className={Styles.mainbutton}>
                 <div className={Styles.category_select}>
                     {renderCategoryButtons()}
                 </div>
                 <div className={Styles.category_select}>
                     {renderSubCategories()}
-                    <div className='selectmenu'>
-                        <SelectMenu />
-                    </div>
                 </div>
-
+                <Doughnutchart />
                 {isDataLoaded && (
                     <div className={Styles.imageGroupContainer}>
                         {isLoading ? (
@@ -148,7 +182,8 @@ const TableSelection = () => {
                             itemData.map((item) => (
                                 <div key={item.productCode} className={Styles.imageGroupItem}>
                                     <Link to="#" onClick={() => handleImageClick(item)}>
-                                        <img src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.imagePath)}`}
+                                        <img
+                                            src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.imagePath)}`}
                                             alt='나인오즈 이미지'
                                             onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
                                             className={Styles.nineozimg}

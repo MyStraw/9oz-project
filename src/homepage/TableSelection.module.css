@@ -5,10 +5,23 @@
     align-items: center;
 }
 
+.main_input {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: flex-end;
+    width: 100%;
+    margin-right: 170px;
+}
+
+.searchContainer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
 .radio_group {
     width: 100%;
-    /* 라디오 버튼 그룹이 부모 너비에 맞게 설정 */
 }
 
 .imageGroupContainer {
@@ -18,7 +31,7 @@
     margin: 0 -10px;
     padding-right: 330px;
     padding-left: 330px;
-    padding-top: 200px;
+    padding-top: 50px;
 
 }
 
