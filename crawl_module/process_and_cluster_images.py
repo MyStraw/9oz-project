@@ -3,7 +3,7 @@ from autoencoder_model import build_advanced_autoencoder, load_autoencoder
 from clustering import find_optimal_clusters, perform_clustering
 from app import image_info_hash_table
 
-def process_and_cluster_images(folder_path = "c:/queenit-img", image_info_hash_table={}):
+def process_and_cluster_images(folder_path = "c:/queenit", image_info_hash_table={}):
     # Step 1: 이미지 로딩 및 전처리
     images = load_and_process_images(folder_path)
     

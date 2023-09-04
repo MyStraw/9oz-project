@@ -6,14 +6,14 @@ from keras.optimizers import Adam
 def build_advanced_autoencoder(input_shape=(28, 28, 1)):
     input_img = Input(shape=input_shape)
     
-    # Encoder
+    # 인코더
     x = Conv2D(64, (3, 3), activation='relu', padding='same')(input_img)
     x = MaxPooling2D((2, 2), padding='same')(x)
     x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
     x = MaxPooling2D((2, 2), padding='same')(x)
     encoded = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
     
-    # Decoder
+    # 디코더 (디코더가 필요한가? 잠재벡터만 추출할건데. 일단 놔두고)
     x = Conv2D(16, (3, 3), activation='relu', padding='same')(encoded)
     x = UpSampling2D((2, 2))(x)
     x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
@@ -37,7 +37,7 @@ def train_advanced_autoencoder(autoencoder, train_data, epochs=50, batch_size=25
                     epochs=epochs,
                     batch_size=batch_size,
                     shuffle=True,
-                    validation_split=0.2,  # Assuming you don't have a separate validation set
+                    validation_split=0.2, 
                     callbacks=callbacks)
     
     # 최종 모델 저장

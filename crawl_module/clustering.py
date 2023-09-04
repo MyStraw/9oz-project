@@ -9,7 +9,7 @@ import os  # os 추가
 import json  # json 라이브러리 추가
 from load_and_process_images import load_images  # 이미지 로딩 함수 추가
 
-def load_images(folder_path="c:/queenin-img"):
+def load_images(folder_path="c:/queenit"):
     image_files = os.listdir(folder_path)
     images = [image.load_img(os.path.join(folder_path, img_file), target_size=(28, 28)) for img_file in image_files]
     return np.array([image.img_to_array(img) for img in images])

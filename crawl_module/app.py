@@ -4,14 +4,26 @@ import requests
 import os
 from process_and_cluster_images import process_and_cluster_images
 from flask_cors import CORS
+import base64
 
 app = Flask(__name__)
+CORS(app)
 
 # 해시테이블로 이미지 정보 저장
 image_info_hash_table = {}
 
-CORS(app)
-@app.route('/crawl_images', methods=['POST'])
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    image_data_base64 = request.json.get('image_data')
+    image_data = base64.b64decode(image_data_base64)
+
+    # AI 모델로 결과를 계산하는 코드 (예시)
+    result = "통신보안"
+
+    return jsonify({"result": result})
+
+@app.route('/crawl', methods=['POST'])
 def crawl_images():
     # 크롤링 로직
     url = "https://web.queenit.kr/"  # '퀸잇' 웹사이트 주소
@@ -24,7 +36,7 @@ def crawl_images():
     
     
     # 이미지 저장 경로
-    save_path = "C:/queenin-img/"
+    save_path = "C:/queenit/"
     
     if not os.path.exists(save_path):
         os.makedirs(save_path)
@@ -47,5 +59,8 @@ def crawl_images():
     process_and_cluster_images(save_path, image_info_hash_table)
     
     return "Crawling and processing completed."
+
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
