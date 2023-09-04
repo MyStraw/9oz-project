@@ -6,7 +6,7 @@ import Styles from './TableSelection.module.css';
 import SelectMenu from '../components/SelectMenu'
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
-import Doughnutchart from '../charts/Doughnutchart'
+import Doughnutchart from '../charts/PieChart'
 import axios from 'axios';
 
 const TableSelection = () => {
@@ -57,7 +57,7 @@ const TableSelection = () => {
 
     const handleImageClick = (item) => {
         const requestData = {
-            imagePath: item.imagePath,
+            image_path: item.image_path,
         };
 
         axios.get(`http://10.125.121.170:8080/list/${selectedCategory}/${selectedSubCategory}`)
@@ -67,7 +67,7 @@ const TableSelection = () => {
                 console.log("ProductCode:", productCode);
                 console.log("SalePrice:", salePrice);
 
-                axios.post(`http://10.125.121.170:8080/predict`, JSON.stringify(requestData))
+                axios.post(`http://10.125.121.170:8080/predict`, (requestData))
                     .then(predictionResponse => {
                         console.log(predictionResponse);
                     })
@@ -171,7 +171,9 @@ const TableSelection = () => {
                 <div className={Styles.category_select}>
                     {renderSubCategories()}
                 </div>
-                <Doughnutchart />
+                <div>
+                    <Doughnutchart />
+                </div>
                 {isDataLoaded && (
                     <div className={Styles.imageGroupContainer}>
                         {isLoading ? (

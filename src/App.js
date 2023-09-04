@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import axios from 'axios';
 import TableSelection from './homepage/TableSelection';
-import SearchResult from './components/SearchResult';
 import './App.css';
 
 function App() {
@@ -53,7 +52,6 @@ function App() {
         <div className="app-container">
           <Routes>
             <Route path="/" element={<TableSelection />} />
-            <Route path="/search-result" element={showSearchResult ? <SearchResult products={products} /> : null} />
           </Routes>
         </div>
       </>
