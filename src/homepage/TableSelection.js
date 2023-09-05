@@ -8,6 +8,7 @@ import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
 import Doughnutchart from '../charts/PieChart'
 import axios from 'axios';
+import { useMediaQuery } from '@mui/material';
 
 const TableSelection = () => {
     const StyledBox = styled(Box)`
@@ -22,6 +23,12 @@ const TableSelection = () => {
             color: black;
         }
     `;
+    const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+
+    // 모바일 화면 여부에 따라 버튼 스타일 설정
+    const buttonStyle = isMobile
+        ? { m: 1, width: '140px', height: '50px', fontSize: '10px', color: 'black' }
+        : { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' };
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);
@@ -116,7 +123,7 @@ const TableSelection = () => {
 
     const renderCategoryButtons = () => {
         return (
-            <StyledBox sx={{ '& button': { m: 1, width: '280px', height: '60px', fontSize: '20px' } }}>
+            <StyledBox sx={{ '& button': buttonStyle }}>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('top')}> 상의 </Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('bottom')}> 하의 </Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('outer')}> 아우터 </Button>
@@ -127,28 +134,35 @@ const TableSelection = () => {
 
     const renderSubCategories = () => {
         return (
-            <div className={Styles.subcategoryContainer}>
+            <div>
                 {selectedCategory === 'top' && (
-                    <StyledBox sx={{ '& button': { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' } }} className={Styles.subcategorybtn}>
+                    <StyledBox sx={{ '& button': buttonStyle }}>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('tshirt')}>티셔츠</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('tshirtsleeveless')}>티셔츠나시</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('knit')}>니트</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('knitsleeveless')}>니트나시</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('blouse')}>블라우스</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('blousesleeveless')}>블라우스나시</Button>
                     </StyledBox>
                 )}
                 {selectedCategory === 'bottom' && (
-                    <StyledBox sx={{ '& button': { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' } }} className={Styles.subcategorybtn}>
+                    <StyledBox sx={{ '& button': buttonStyle }}>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('pants')}>바지</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('denim')}>데님</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('skirt')}>스커트</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('leggings')}>레깅스</Button>
                     </StyledBox>
                 )}
                 {selectedCategory === 'outer' && (
-                    <StyledBox sx={{ '& button': { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' } }} className={Styles.subcategorybtn}>
+                    <StyledBox sx={{ '& button': buttonStyle }}>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('jacket')}>자켓</Button>
-                        <Button variant="outlined" onClick={() => handleSubCategorySelect('coat')}>코트</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('coat')}>남방</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('jumper')}>점퍼</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('vest')}>베스트(vest)</Button>
                     </StyledBox>
                 )}
                 {selectedCategory === 'onepiece' && (
-                    <StyledBox sx={{ '& button': { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' } }} className={Styles.subcategorybtn}>
+                    <StyledBox sx={{ '& button': buttonStyle}}>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('onepiece')}>원피스</Button>
                     </StyledBox>
                 )}
@@ -158,7 +172,7 @@ const TableSelection = () => {
 
     return (
         <>
-            <div className={Styles.main_input}>
+            <div className={`${Styles.main_input} ${Styles.mobileCenter}`}>
                 <div className={Styles.searchContainer}>
                     <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
@@ -174,34 +188,34 @@ const TableSelection = () => {
                 <div>
                     <Doughnutchart />
                 </div>
-                {isDataLoaded && (
-                    <div className={Styles.imageGroupContainer}>
-                        {isLoading ? (
-                            <div className={Styles.loadingContainer}>
-                                <p>Loading...</p>
-                            </div>
-                        ) : (
-                            itemData.map((item) => (
-                                <div key={item.productCode} className={Styles.imageGroupItem}>
-                                    <Link to="#" onClick={() => handleImageClick(item)}>
-                                        <img
-                                            src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.imagePath)}`}
-                                            alt='나인오즈 이미지'
-                                            onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
-                                            className={Styles.nineozimg}
-                                        />
-                                        <div className={Styles.product_info}>
-                                            <p className={Styles.prdname}>제품명: {item.productName}</p>
-                                            <p>제품코드: {item.productCode}</p>
-                                            <p>가격: {item.salePrice}</p>
-                                        </div>
-                                    </Link>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                )}
             </div>
+            {isDataLoaded && (
+                <div className={Styles.imageGroupContainer}>
+                    {isLoading ? (
+                        <div className={Styles.loadingContainer}>
+                            <p>Loading...</p>
+                        </div>
+                    ) : (
+                        itemData.map((item) => (
+                            <div key={item.productCode} className={Styles.imageGroupItem}>
+                                <Link to="#" onClick={() => handleImageClick(item)}>
+                                    <img
+                                        src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.imagePath)}`}
+                                        alt='나인오즈 이미지'
+                                        onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
+                                        className={Styles.nineozimg}
+                                    />
+                                    <div className={Styles.product_info}>
+                                        <p className={Styles.prdname}>제품명: {item.productName}</p>
+                                        <p>제품코드: {item.productCode}</p>
+                                        <p>가격: {item.salePrice}</p>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
         </>
     );
 }

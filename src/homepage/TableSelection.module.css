@@ -1,76 +1,144 @@
-.category_select {
-    display: flex;
-    overflow: auto;
-    flex-direction: column;
-    align-items: center;
+/* 예시: 데스크톱 화면 */
+@media (min-width: 1024px) {
+    .main_input {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-content: flex-end;
+        width: 100%;
+        margin-right: 170px;
+    }
+
+
+    .category_select {
+        display: flex;
+        overflow: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .mainbutton {
+        margin-top: 25px;
+    }
+
+
+
+    .searchContainer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .radio_group {
+        width: 100%;
+    }
+
+    .imageGroupContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 0 -10px;
+        padding-right: 330px;
+        padding-left: 330px;
+        padding-top: 50px;
+
+    }
+
+    .imageGroupItem {
+        flex: 1 1 calc(25% - 10px);
+        /* 너비를 25%로 설정하고, 이미지 사이에 간격을 유지 */
+        margin: 5px;
+        /* 이미지 사이 간격 설정 */
+        margin-top: 10px;
+    }
+
+    .nineozimg {
+        width: 300px;
+        height: 400px;
+        margin: 0 auto;
+        /* 이미지를 수평 가운데로 정렬 */
+    }
+
+    .subcategorybtn {
+        justify-content: center;
+    }
+
+    .product_info {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .prdname {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .product_info p {
+        margin: 5px;
+    }
 }
 
-.main_input {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    justify-content: flex-end;
-    width: 100%;
-    margin-right: 170px;
+
+
+/* 예시: 태블릿 화면 */
+@media (max-width: 1023px) {
+    /* 태블릿 화면에 적용할 스타일 */
 }
 
-.searchContainer {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
+/*모바일 화면*/
+@media (max-width: 768px) {
+    .mobileCenter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
 
-.radio_group {
-    width: 100%;
-}
+    .searchContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-right: 38px;
+    }
 
-.imageGroupContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 0 -10px;
-    padding-right: 330px;
-    padding-left: 330px;
-    padding-top: 50px;
+    .category_select {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 400px;
+        margin-left: 100px;
+        margin-top: 20px;
+    }
 
-}
+    .imageGroupContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 0 -10px;
+        padding-top: 50px;
+        margin-left: 11px;
+        margin-right: -3px;
+    }
 
-.imageGroupItem {
-    flex: 1 1 calc(25% - 10px);
-    /* 너비를 25%로 설정하고, 이미지 사이에 간격을 유지 */
-    margin: 5px;
-    /* 이미지 사이 간격 설정 */
-    margin-top: 10px;
-}
+    .imageGroupItem {
+        flex: 1 1 calc(25% - 10px);
+        /* 너비를 25%로 설정하고, 이미지 사이에 간격을 유지 */
+        /* 이미지 사이 간격 설정 */
+        margin-top: 10px;
+    }
 
-.nineozimg {
-    width: 300px;
-    height: 400px;
-    margin: 0 auto;
-    /* 이미지를 수평 가운데로 정렬 */
-}
-
-.subcategorybtn {
-    justify-content: center;
-}
-
-.product_info {
-    background-color: #f0f0f0;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-}
-
-.prdname {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.product_info p {
-    margin: 5px;
+    .nineozimg {
+        width: 190px;
+        height: 230px;
+        /*이미지를 수평 가운데로 정렬 */
+        margin: 0 auto;
+    }
 }
