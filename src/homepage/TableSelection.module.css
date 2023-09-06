@@ -166,6 +166,26 @@
 
 /*모바일 화면*/
 @media (max-width: 768px) {
+    .product_info {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .prdname {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .product_info p {
+        margin: 5px;
+    }
+
     .mobileCenter {
         display: flex;
         align-items: center;
