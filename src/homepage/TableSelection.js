@@ -3,12 +3,11 @@ import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import Styles from './TableSelection.module.css';
-import SelectMenu from '../components/SelectMenu'
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
-import Doughnutchart from '../charts/PieChart'
 import axios from 'axios';
 import { useMediaQuery } from '@mui/material';
+import PieChart from '../charts/PieChart';
 
 const TableSelection = () => {
     const StyledBox = styled(Box)`
@@ -18,41 +17,61 @@ const TableSelection = () => {
             height: 60px;
             font-size: 20px;
             &:focus {
-                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+                box-shadow: 0 0 0 0.3rem #33FFFF;
             }
             color: black;
         }
     `;
+
+
     const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
     // 모바일 화면 여부에 따라 버튼 스타일 설정
     const buttonStyle = isMobile
         ? { m: 1, width: '140px', height: '50px', fontSize: '10px', color: 'black' }
-        : { m: 1, width: '280px', height: '60px', fontSize: '20px', color: 'black' };
+        : { m: 1, width: '200px', height: '50px', fontSize: '15px', color: 'black' };
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);
     const [itemData, setItemData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(''); // 추가: 검색어 상태
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedSortValue, setSelectedSortValue] = useState('desc');
+    const [selectedSortColumn, setSelectedSortColumn] = useState('totalsale');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 16; // 페이지당 아이템 수
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = itemData.slice(indexOfFirstItem, indexOfLastItem);
+
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         setSelectedSubCategory(null);
+        paginate(1);
     };
+    const handleSortChange = (event) => {
+        const selectedSortValue = event.target.value;
+        const selectedSortColumn = event.target.value;
+        setSelectedSortValue(selectedSortValue);
+        setSelectedSortColumn(selectedSortColumn);
+    };
+
 
     const handleSubCategorySelect = (subCategory) => {
         setSelectedSubCategory(subCategory);
         setItemData([]);
         setIsDataLoaded(false);
 
-        const dataURL = `http://10.125.121.170:8080/list/${selectedCategory}/${subCategory}`;
+        // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
+        const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
 
-        if (selectedCategory && subCategory) {
+        if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
-            fetch(dataURL)
-                .then(response => response.json())
+            axios.get(dataURL)
+                .then(response => response.data)
                 .then(data => {
                     setItemData(data);
                     setIsDataLoaded(true);
@@ -61,6 +80,7 @@ const TableSelection = () => {
                 .finally(() => setIsLoading(false));
         }
     };
+
 
     const handleImageClick = (item) => {
         const requestData = {
@@ -86,8 +106,6 @@ const TableSelection = () => {
                 console.error('Error fetching product info:', error);
             });
     };
-
-
 
     const handleSearch = () => {
         if (!searchQuery.trim()) {
@@ -117,9 +135,21 @@ const TableSelection = () => {
     };
 
     useEffect(() => {
-        // 검색어가 변경될 때 검색 함수를 호출
         handleSearch();
     }, [searchQuery]);
+
+    useEffect(() => {
+        const initialDataURL = `http://10.125.121.170:8080/product/list?sort=desc&sortcolumn=totalsale`;
+
+        axios.get(initialDataURL)
+            .then(response => response.data)
+            .then(data => {
+                setItemData(data);
+                setIsDataLoaded(true);
+            })
+            .catch(error => console.error('Fetch Error:', error))
+            .finally(() => setIsLoading(false));
+    }, []);
 
     const renderCategoryButtons = () => {
         return (
@@ -127,7 +157,7 @@ const TableSelection = () => {
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('top')}> 상의 </Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('bottom')}> 하의 </Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('outer')}> 아우터 </Button>
-                <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('onepiece')}> 원피스 </Button>
+                <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('onepiece')} onClick={() => handleSubCategorySelect('onepiece')}> 원피스 </Button>
             </StyledBox>
         );
     };
@@ -143,6 +173,7 @@ const TableSelection = () => {
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('knitsleeveless')}>니트나시</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('blouse')}>블라우스</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('blousesleeveless')}>블라우스나시</Button>
+                        <Button variant="outlined" onClick={() => handleSubCategorySelect('cardigan')}>가디건</Button>
                     </StyledBox>
                 )}
                 {selectedCategory === 'bottom' && (
@@ -161,14 +192,76 @@ const TableSelection = () => {
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('vest')}>베스트(vest)</Button>
                     </StyledBox>
                 )}
-                {selectedCategory === 'onepiece' && (
-                    <StyledBox sx={{ '& button': buttonStyle}}>
-                        <Button variant="outlined" onClick={() => handleSubCategorySelect('onepiece')}>원피스</Button>
-                    </StyledBox>
+            </div>
+        );
+    };
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const renderPagination = () => {
+        const pageNumbers = Math.ceil(itemData.length / itemsPerPage);
+
+        // 현재 페이지를 기준으로 현재 블록을 계산
+        const currentBlock = Math.ceil(currentPage / 10);
+        const startPage = (currentBlock - 1) * 10 + 1;
+        const endPage = currentBlock * 10;
+
+        return (
+            <div>
+                {currentBlock > 1 && (
+                    <Button onClick={() => paginate(startPage - 1)}>{'이전'}</Button>
+                )}
+
+                {Array.from({ length: pageNumbers }, (_, index) => {
+                    if (index + 1 >= startPage && index + 1 <= endPage) {
+                        console.log(currentPage, index + 1);
+                        return (
+                            <Button
+                                key={index}
+                                onClick={() => paginate(index + 1)}
+                                className={`${Styles.pageButton} ${currentPage === index + 1 ? Styles.activePage : ''}`}
+                            >
+                                {index + 1}
+                            </Button>
+
+                        );
+                    }
+                    return null;
+                })}
+
+                {currentBlock < Math.ceil(pageNumbers / 10) && (
+                    <Button onClick={() => paginate(endPage + 1)}>{'다음'}</Button>
                 )}
             </div>
         );
     };
+
+
+
+
+    const renderItems = () => {
+        return currentItems.map((item) => (
+            <div key={item.id} className={Styles.imageGroupItem}>
+                <Link to="#" onClick={() => handleImageClick(item)}>
+                    <img
+                        src={`http://10.125.121.170:8080/images/${item.imagePath}`}
+                        alt='나인오즈 이미지'
+                        onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
+                        className={Styles.nineozimg}
+                    />
+                </Link>
+                <div className={Styles.product_info}>
+                    <p className={Styles.prdname}>제품명: {item.productName}</p>
+                    <p>제품코드: {item.productCode}</p>
+                    <p>가격: {item.salePrice}</p>
+                </div>
+            </div>
+        ));
+    };
+
+
 
     return (
         <>
@@ -176,7 +269,17 @@ const TableSelection = () => {
                 <div className={Styles.searchContainer}>
                     <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
-                <SelectMenu />
+                <select className="select_sort" onChange={(e) => handleSortChange(e)} defaultValue={'desc'}>
+                    <option value="none">선택</option>
+                    <option value="asc">오름차순</option>
+                    <option value="desc">내림차순</option>
+                </select>
+                <select className="select_sort_ascdesc" onChange={(e) => handleSortChange(e)} defaultValue={'totalsale'}>
+                    <option value="none">선택</option>
+                    <option value="totalsale">판매량순</option>
+                    <option value="productName">상품명</option>
+                    <option value="salePrice">판매가격순</option>
+                </select>
             </div>
             <div className={Styles.mainbutton}>
                 <div className={Styles.category_select}>
@@ -186,33 +289,20 @@ const TableSelection = () => {
                     {renderSubCategories()}
                 </div>
                 <div>
-                    <Doughnutchart />
+                    <PieChart />
                 </div>
             </div>
             {isDataLoaded && (
                 <div className={Styles.imageGroupContainer}>
                     {isLoading ? (
-                        <div className={Styles.loadingContainer}>
-                            <p>Loading...</p>
-                        </div>
+                        <p>로딩중</p>
                     ) : (
-                        itemData.map((item) => (
-                            <div key={item.productCode} className={Styles.imageGroupItem}>
-                                <Link to="#" onClick={() => handleImageClick(item)}>
-                                    <img
-                                        src={`http://10.125.121.170:8080/display?imagePath=${encodeURIComponent(item.imagePath)}`}
-                                        alt='나인오즈 이미지'
-                                        onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
-                                        className={Styles.nineozimg}
-                                    />
-                                    <div className={Styles.product_info}>
-                                        <p className={Styles.prdname}>제품명: {item.productName}</p>
-                                        <p>제품코드: {item.productCode}</p>
-                                        <p>가격: {item.salePrice}</p>
-                                    </div>
-                                </Link>
+                        <>
+                            {renderItems()}
+                            <div className={`${Styles.centered}`}>
+                                {renderPagination()}
                             </div>
-                        ))
+                        </>
                     )}
                 </div>
             )}

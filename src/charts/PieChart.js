@@ -7,9 +7,9 @@ const PieChart = () => {
 
   useEffect(() => {
     axios
-      .get('http://10.125.121.170:8080/list/top/tshirt') // 티셔츠 예시
+      .get('http://10.125.121.170:8080/product/list?sortcolumn=totalsale&sort=desc') // 티셔츠 예시
       .then((response) => {
-        // 데이터를 가져와서 상위 5개 항목을 추출
+
         const sortedData = response.data.sort((a, b) => b.totalsale - a.totalsale);
         const topFiveData = sortedData.slice(0, 5);
         setData(topFiveData);
@@ -24,8 +24,8 @@ const PieChart = () => {
     options: {
       chart: {
         type: 'pie',
-        height: 420,
-        width: '100%',
+        height: 200,
+        width: 100,
       },
       colors: ["#F78181", "#F4FA58", "#F7BE81", "#81F7D8", "#8181F7"],
     },

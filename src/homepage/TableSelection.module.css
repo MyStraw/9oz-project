@@ -36,11 +36,12 @@
     .imageGroupContainer {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
-        margin: 0 -10px;
+        justify-content: center;
+        margin: 20px -10px 0;
         padding-right: 330px;
         padding-left: 330px;
         padding-top: 50px;
+        padding-bottom: 20px;
 
     }
 
@@ -70,7 +71,6 @@
         margin-top: 10px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
         align-items: flex-start;
     }
 
@@ -83,13 +83,85 @@
     .product_info p {
         margin: 5px;
     }
+
+    /* 페이지 버튼 스타일 */
+    .pageButton {
+        background-color: transparent;
+        border: 1px solid #333;
+        color: #333;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .pageButton:hover {
+        background-color: #000000;
+        color: black;
+    }
+
+    /* 활성 페이지 버튼 스타일 */
+    .activePage {
+        background-color: aqua !important;
+        color: black !important;
+    }
 }
 
 
 
-/* 예시: 태블릿 화면 */
+/* 태블릿 화면 */
 @media (max-width: 1023px) {
-    /* 태블릿 화면에 적용할 스타일 */
+    .mobileCenter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .searchContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin-right: 38px;
+    }
+
+    .category_select {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 400px;
+        margin-left: 100px;
+        margin-top: 20px;
+    }
+
+    .imageGroupContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: 0 -10px;
+        padding-top: 50px;
+        margin-left: 11px;
+        margin-right: -3px;
+    }
+
+    .imageGroupItem {
+        /* 너비를 25%로 설정하고, 이미지 사이에 간격을 유지 */
+        flex: 1 1 calc(25% - 10px);
+        /* 이미지 사이 간격 설정 */
+        margin-top: 10px;
+    }
+
+    .nineozimg {
+        width: 190px;
+        height: 230px;
+        /*이미지를 수평 가운데로 정렬 */
+        margin: 0 auto;
+    }
+
+    .activePage {
+        background-color: aqua;
+    }
 }
 
 /*모바일 화면*/
@@ -129,8 +201,8 @@
     }
 
     .imageGroupItem {
-        flex: 1 1 calc(25% - 10px);
         /* 너비를 25%로 설정하고, 이미지 사이에 간격을 유지 */
+        flex: 1 1 calc(25% - 10px);
         /* 이미지 사이 간격 설정 */
         margin-top: 10px;
     }
@@ -140,5 +212,9 @@
         height: 230px;
         /*이미지를 수평 가운데로 정렬 */
         margin: 0 auto;
+    }
+
+    .activePage {
+        background-color: aqua;
     }
 }
