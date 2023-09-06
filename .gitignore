@@ -32,11 +32,13 @@ build/
 ### VS Code ###
 .vscode/
 .metadata/
+9oz/src/main/resources/static/images/
 
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 
 ### Eclipse ###
+9oz/src/main/resources/static/images/
 .metadata/
 bin/
 tmp/
