@@ -6,16 +6,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,47 +26,101 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.oz.domain.ProductImage;
-import com.example.oz.repository.ImageRepository;
+import com.example.oz.domain.QProductImage;
+import com.example.oz.repository.ProductImageRepository;
+import com.querydsl.core.BooleanBuilder;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import reactor.core.publisher.Mono;
 
-@RestController
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+class ProductSearchOption {
+
+	private String sort; //asc , desc , none
+	private String sortcolumn; // salePrice, ProductName, totalsale 프론트에서 send할떄 필드이름으로 넘겨주면됨
+	private String mainclass; // top(상의),bottom(하의) table codeclass에 필드 mainclass
+	private String semiclass; //tshirt... table codeclass에 필드 semiclass
+}
 @RequiredArgsConstructor
-public class ImageController {
+@RestController
+public class ProductImageController {
 	
-	//생성자 주입법 Autowired필드에 쓰지않기
-	private final ImageRepository imageRepo;
+	private final ProductImageRepository productImageRepo;
 	
-	//전체검색
-	@GetMapping("/list")
-	public Iterable<ProductImage> getImages(){
-		return imageRepo.findAll();
+	
+	@GetMapping("/product/list")
+	public List<ProductImage> getProductImages(ProductSearchOption pso){
+		System.out.println("getProductImages "+ pso);
+		
+		BooleanBuilder builder = new BooleanBuilder();
+		QProductImage qpi = QProductImage.productImage;
+		
+		//검색아이템
+		if(pso.getMainclass() != null) {
+			builder.and(qpi.mainclass.like("%"+pso.getMainclass()+"%"));			
+			if(pso.getSemiclass() != null) {
+				builder.and(qpi.semiclass.like("%"+pso.getSemiclass()+"%"));	
+			}
+		}
+		//Iterable<ProductImage> iter =  productImageRepo.findAll(builder,Sort.by("salePrice").ascending());
+		Sort sort = null;
+	    if(pso.getSort() != null && pso.getSortcolumn() != null) {
+	        sort = pso.getSort().equalsIgnoreCase("asc") ? Sort.by(pso.getSortcolumn()).ascending() : Sort.by(pso.getSortcolumn()).descending();
+	    }
+
+	    Iterable<ProductImage> iter;
+	    if(builder.getValue() == null) {
+	        iter = sort != null ? productImageRepo.findAll(sort) : productImageRepo.findAll();
+	    } else {
+	        iter = productImageRepo.findAll(builder, sort != null ? sort : Sort.unsorted());
+	    }
+
+	    List<ProductImage> list = StreamSupport.stream(iter.spliterator(), false)
+	                                           .collect(Collectors.toList());
+	    return list;
 	}
 	
-	//mainclass로 검색
-	@GetMapping("/list/{mainclass}")
-    public Iterable<ProductImage> getImagesByMainclass(@PathVariable String mainclass) {
-        return imageRepo.findByMainclass(mainclass);
-    }
-
-    // semiclass로 검색
-    @GetMapping("/list/{mainclass}/{semiclass}")
-    public Iterable<ProductImage> getImagesBySemiclass(@PathVariable String mainclass, @PathVariable String semiclass) {
-        return imageRepo.findByMainclassAndSemiclass(mainclass, semiclass);
-    }
-    
- // product_code 또는 product_name으로 검색
+//    @GetMapping("/display") //내 로컬의 이미지를 표시하기
+//	public ResponseEntity<byte[]> getImage(String imagePath ){
+//		System.out.println("getImage "+ imagePath);
+//		
+//		File file = new File(imagePath);
+//		
+//		ResponseEntity<byte[]> result = null;
+//		
+//		try {
+//			HttpHeaders header = new HttpHeaders();
+//			
+//			header.add("Content-type",Files.probeContentType(file.toPath()));
+//			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);			
+//			
+//		}catch(IOException e) {
+//			e.printStackTrace();
+//		}
+//		return result;		
+//	}
+	
+	// product_code 또는 product_name으로 검색
     @GetMapping("/search")
     public Iterable<ProductImage> getImagesByQuery(@RequestParam String query) {
+    	System.out.println("getImagesByQuery "+ query);
         Iterable<ProductImage> results;
 
         // 먼저 product_code로 검색
-        results = imageRepo.findByProductCode(query);
+        results = productImageRepo.findByProductCode(query);
         
         if (!results.iterator().hasNext()) {  // 결과가 비어있는지 확인
             // product_name으로 검색
-            results = imageRepo.findByProductName(query);
+            results = productImageRepo.findByProductName(query);
         }
         
         if (!results.iterator().hasNext()) {  // 결과가 비어있는지 확인
@@ -74,33 +130,11 @@ public class ImageController {
         
         return results;
     }
-
-
-
-   
     
-    @GetMapping("/display") //내 로컬의 이미지를 표시하기
-	public ResponseEntity<byte[]> getImage(String imagePath){		
-		File file = new File(imagePath);
-		
-		ResponseEntity<byte[]> result = null;
-		
-		try {
-			HttpHeaders header = new HttpHeaders();
-			
-			header.add("Content-type",Files.probeContentType(file.toPath()));
-			
-			result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);			
-			
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		return result;		
-	}
-	
     @PostMapping("/predict")
     public ResponseEntity<String> predictImage(@RequestBody Map<String, String> payload) throws IOException {
-        String imageName = payload.get("image_path");
+    	System.out.println("predictImage "+ payload);
+    	String imageName = payload.get("image_path");
         
         // 이미지 파일을 읽는 코드는 여기에 위치해야 합니다. (예: byte[] imageData = ...)
         byte[] imageData = null; 
@@ -132,6 +166,4 @@ public class ImageController {
             return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-	
 }

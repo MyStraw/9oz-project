@@ -40,8 +40,8 @@ public class SecurityConfig {
 		return source; //설정된 UrlBasedCorsConfigurationSource 객체를 반환. 이 반환 값은 Spring Security의 CORS 필터에서 사용.
 	}
 
-	@Autowired //스프링 시큐리티 내부 설정에 이미 자동으로 컨테이너에 빈 등록되어있다. 컨테이너로부터 자동 주입. 인증 설정 담당.
-	private AuthenticationConfiguration authConfig;
+//	@Autowired //스프링 시큐리티 내부 설정에 이미 자동으로 컨테이너에 빈 등록되어있다. 컨테이너로부터 자동 주입. 인증 설정 담당.
+//	private AuthenticationConfiguration authConfig;
 
 
 //	@SuppressWarnings("removal")
