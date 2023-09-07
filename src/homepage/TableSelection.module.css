@@ -40,7 +40,7 @@
         margin: 20px -10px 0;
         padding-right: 330px;
         padding-left: 330px;
-        padding-top: 50px;
+        padding-top: 450px;
         padding-bottom: 20px;
 
     }
@@ -55,7 +55,7 @@
 
     .nineozimg {
         width: 300px;
-        height: 400px;
+        height: 350px;
         margin: 0 auto;
         /* 이미지를 수평 가운데로 정렬 */
     }
@@ -72,6 +72,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        width: 282px;
     }
 
     .prdname {
@@ -104,6 +105,11 @@
     .activePage {
         background-color: aqua !important;
         color: black !important;
+    }
+    /*바 그래프*/
+    .barChartContainer {
+        width: 800px;
+        height: 40px;
     }
 }
 
@@ -169,15 +175,15 @@
     .product_info {
         background-color: #f0f0f0;
         padding: 10px;
-        border-radius: 5px;
+        border-radius: 40px;
         margin-top: 10px;
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        width: 175px;
     }
 
     .prdname {
-        font-size: 20px;
+        font-size: 15px;
         font-weight: bold;
         margin-bottom: 5px;
     }

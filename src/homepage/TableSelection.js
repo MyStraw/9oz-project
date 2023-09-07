@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Styles from './TableSelection.module.css';
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useMediaQuery } from '@mui/material';
-import PieChart from '../charts/PieChart';
+import BarChart from '../charts/BarChart';
 
 const TableSelection = () => {
     const StyledBox = styled(Box)`
@@ -40,7 +43,7 @@ const TableSelection = () => {
     const [selectedSortValue, setSelectedSortValue] = useState('desc');
     const [selectedSortColumn, setSelectedSortColumn] = useState('totalsale');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 16; // 페이지당 아이템 수
+    const itemsPerPage = 20;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -67,7 +70,7 @@ const TableSelection = () => {
 
         // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
         const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
-
+        console.log(dataURL)
         if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
             axios.get(dataURL)
@@ -216,7 +219,6 @@ const TableSelection = () => {
 
                 {Array.from({ length: pageNumbers }, (_, index) => {
                     if (index + 1 >= startPage && index + 1 <= endPage) {
-                        console.log(currentPage, index + 1);
                         return (
                             <Button
                                 key={index}
@@ -255,7 +257,7 @@ const TableSelection = () => {
                 <div className={Styles.product_info}>
                     <p className={Styles.prdname}>제품명: {item.productName}</p>
                     <p>제품코드: {item.productCode}</p>
-                    <p>가격: {item.salePrice}</p>
+                    <p>가격: {item.salePrice}원(￦)</p>
                 </div>
             </div>
         ));
@@ -269,17 +271,31 @@ const TableSelection = () => {
                 <div className={Styles.searchContainer}>
                     <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} />
                 </div>
-                <select className="select_sort" onChange={(e) => handleSortChange(e)} defaultValue={'desc'}>
-                    <option value="none">선택</option>
-                    <option value="asc">오름차순</option>
-                    <option value="desc">내림차순</option>
-                </select>
-                <select className="select_sort_ascdesc" onChange={(e) => handleSortChange(e)} defaultValue={'totalsale'}>
-                    <option value="none">선택</option>
-                    <option value="totalsale">판매량순</option>
-                    <option value="productName">상품명</option>
-                    <option value="salePrice">판매가격순</option>
-                </select>
+                <FormControl variant="outlined" size="small">
+                    <Select
+                        className="select_sort"
+                        onChange={(e) => handleSortChange(e)}
+                        defaultValue={'desc'}
+                    >
+                        <MenuItem value="none">선택</MenuItem>
+                        <MenuItem value="asc">오름차순</MenuItem>
+                        <MenuItem value="desc">내림차순</MenuItem>
+                    </Select>
+                </FormControl>
+
+                <FormControl variant="outlined" size="small">
+                    <Select
+                        className="select_sort_ascdesc"
+                        onChange={(e) => handleSortChange(e)}
+                        defaultValue={'totalsale'}
+                    >
+                        <MenuItem value="none">선택</MenuItem>
+                        <MenuItem value="totalsale">판매량순</MenuItem>
+                        <MenuItem value="productName">상품명</MenuItem>
+                        <MenuItem value="salePrice">판매가격순</MenuItem>
+                    </Select>
+                </FormControl>
+
             </div>
             <div className={Styles.mainbutton}>
                 <div className={Styles.category_select}>
@@ -288,9 +304,9 @@ const TableSelection = () => {
                 <div className={Styles.category_select}>
                     {renderSubCategories()}
                 </div>
-                <div>
-                    <PieChart />
-                </div>
+            </div>
+            <div className={`${Styles.barChartContainer}`}>
+                <BarChart selectedSortValue={selectedSortValue} selectedSortColumn={selectedSortColumn} selectedCategory={selectedCategory} subCategory={selectedSubCategory} />
             </div>
             {isDataLoaded && (
                 <div className={Styles.imageGroupContainer}>
