@@ -33,14 +33,14 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
       },
       plotOptions: {
         bar: {
-          horizontal: true, // Display as horizontal bar chart
+          horizontal: true,
         },
       },
       xaxis: {
-        categories: data.map((item) => item.productName), // Use product names as categories on the x-axis
+        categories: data.map((item) => item.productName),
         labels: {
           style: {
-            colors: '#000', // Set label text color to black
+            colors: '#000',
           },
         },
       },

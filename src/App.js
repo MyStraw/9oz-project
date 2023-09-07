@@ -24,11 +24,11 @@ function App() {
       <Router>
         <>
           <hr />
-          <Link to="/">
+          <a href="/">
             <div className="NineOzImg">
               <img src="http://9oz.co.kr/web/upload/NNEditor/20220316/a0bb292ad9713fe53012353fa356a960.png" alt="9oz" />
             </div>
-          </Link>
+          </a>
           <hr />
           <div className="login-button-container">
             <Button>Login</Button> {/* 로그인 버튼 */}
