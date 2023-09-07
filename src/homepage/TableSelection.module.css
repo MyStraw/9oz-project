@@ -40,7 +40,7 @@
         margin: 20px -10px 0;
         padding-right: 330px;
         padding-left: 330px;
-        padding-top: 450px;
+        padding-top: 320px;
         padding-bottom: 20px;
 
     }
@@ -88,17 +88,14 @@
     /* 페이지 버튼 스타일 */
     .pageButton {
         background-color: transparent;
-        border: 1px solid #333;
-        color: #333;
         padding: 5px 10px;
         margin: 0 5px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        margin-top: 30px;
     }
-
-    .pageButton:hover {
-        background-color: #000000;
-        color: black;
+    
+    .activePage:hover {
+        background-color: #81DAF5;
     }
 
     /* 활성 페이지 버튼 스타일 */

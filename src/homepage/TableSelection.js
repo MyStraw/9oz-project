@@ -7,7 +7,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Styles from './TableSelection.module.css';
 import TextField from '@mui/material/TextField';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useMediaQuery } from '@mui/material';
 import BarChart from '../charts/BarChart';
@@ -42,6 +42,8 @@ const TableSelection = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedSortValue, setSelectedSortValue] = useState('desc');
     const [selectedSortColumn, setSelectedSortColumn] = useState('totalsale');
+    const [productName, setProductName] = useState('');
+    const [salePrice, setSalePrice] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
 
@@ -70,7 +72,7 @@ const TableSelection = () => {
 
         // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
         const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
-        console.log(dataURL)
+
         if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
             axios.get(dataURL)
@@ -84,31 +86,39 @@ const TableSelection = () => {
         }
     };
 
+    const navigate = useNavigate();
 
     const handleImageClick = (item) => {
+        const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
+        const fullPath = baseImagePath + item.imagePath;
+        const mainClass = item.mainclass;
+
         const requestData = {
-            image_path: item.image_path,
+            image_path: fullPath,
+            mainclass: mainClass
         };
 
-        axios.get(`http://10.125.121.170:8080/list/${selectedCategory}/${selectedSubCategory}`)
-            .then(response => {
-                const { productName, productCode, salePrice } = response.data;
-                console.log("ProductName:", productName);
-                console.log("ProductCode:", productCode);
-                console.log("SalePrice:", salePrice);
+        const infoProductCode = item.productCode;
 
-                axios.post(`http://10.125.121.170:8080/predict`, (requestData))
-                    .then(predictionResponse => {
-                        console.log(predictionResponse);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
+        axios.post('http://10.125.121.170:8080/predict', requestData, mainClass,{
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                const { similar_item_urls } = response.data || {};
+
+                console.log('similar_item_urls:', similar_item_urls);
+
+                // 페이지 이동 시 infoProductCode를 넘김
+                navigate('/item_info', { state: { similarItemPaths: similar_item_urls, infoProductCode } });
             })
-            .catch(error => {
-                console.error('Error fetching product info:', error);
+            .catch((error) => {
+                console.error(error);
             });
     };
+
+
 
     const handleSearch = () => {
         if (!searchQuery.trim()) {
@@ -139,6 +149,7 @@ const TableSelection = () => {
 
     useEffect(() => {
         handleSearch();
+        // eslint-disable-next-line
     }, [searchQuery]);
 
     useEffect(() => {
@@ -212,7 +223,7 @@ const TableSelection = () => {
         const endPage = currentBlock * 10;
 
         return (
-            <div>
+            <div className={Styles.pageButton}>
                 {currentBlock > 1 && (
                     <Button onClick={() => paginate(startPage - 1)}>{'이전'}</Button>
                 )}
@@ -246,7 +257,7 @@ const TableSelection = () => {
     const renderItems = () => {
         return currentItems.map((item) => (
             <div key={item.id} className={Styles.imageGroupItem}>
-                <Link to="#" onClick={() => handleImageClick(item)}>
+                <Link to="/item_info" onClick={() => handleImageClick(item)}>
                     <img
                         src={`http://10.125.121.170:8080/images/${item.imagePath}`}
                         alt='나인오즈 이미지'

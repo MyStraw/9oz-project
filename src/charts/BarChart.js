@@ -50,7 +50,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
 
   return (
     <div>
-      <ReactApexChart options={chartOptions.options} series={chartOptions.series} type="bar" height={420} />
+      <ReactApexChart options={chartOptions.options} series={chartOptions.series} type="bar" height={350} />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import TableSelection from './homepage/TableSelection';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import NextPage from "./homepage/NextPage";
 
 function App() {
   const theme = createTheme({
@@ -37,6 +38,7 @@ function App() {
           <div className="app-container">
             <Routes>
               <Route path="/" element={<TableSelection />} />
+              <Route path="/item_info" element={<NextPage />} />
             </Routes>
           </div>
         </>
