@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,6 +91,12 @@ public class ProductImageController {
 	    return list;
 	}
 	
+	//클릭했을때 상세페이지
+	@GetMapping("product/list/{product_code}")
+	public Iterable<ProductImage> getProductImagesByProductCode(@PathVariable String product_code) {
+        return productImageRepo.findByProductCode(product_code);
+    }
+	
 //    @GetMapping("/display") //내 로컬의 이미지를 표시하기
 //	public ResponseEntity<byte[]> getImage(String imagePath ){
 //		System.out.println("getImage "+ imagePath);
@@ -133,13 +141,15 @@ public class ProductImageController {
     
     @PostMapping("/predict")
     public ResponseEntity<String> predictImage(@RequestBody Map<String, String> payload) throws IOException {
-    	System.out.println("predictImage "+ payload);
     	String imageName = payload.get("image_path");
-        
+    	String mainclass = payload.get("mainclass");
+    	System.out.println("predictImage " + payload);
+    	
         // 이미지 파일을 읽는 코드는 여기에 위치해야 합니다. (예: byte[] imageData = ...)
         byte[] imageData = null; 
         try {
             imageData = Files.readAllBytes(Paths.get(imageName)); // 이미지 파일을 읽는다.
+            System.out.println("predictImage " + payload);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>("Image loading error", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -149,10 +159,14 @@ public class ProductImageController {
         //WebClient webClient = WebClient.create("http://localhost:5000");
         WebClient webClient = WebClient.create("http://10.125.121.185:5000");
         
+        Map<String, String> dataMap = new HashMap<>();
+        dataMap.put("image_data", base64Encoded);
+        dataMap.put("mainclass", mainclass);
+        
         Mono<String> responseMono = webClient.post()
             .uri("/predict")
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(Collections.singletonMap("image_data", base64Encoded))
+            .bodyValue(dataMap)
             .retrieve()
             .bodyToMono(String.class);
         
