@@ -42,8 +42,6 @@ const TableSelection = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedSortValue, setSelectedSortValue] = useState('desc');
     const [selectedSortColumn, setSelectedSortColumn] = useState('totalsale');
-    const [productName, setProductName] = useState('');
-    const [salePrice, setSalePrice] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
 
@@ -59,9 +57,13 @@ const TableSelection = () => {
     };
     const handleSortChange = (event) => {
         const selectedSortValue = event.target.value;
-        const selectedSortColumn = event.target.value;
-        setSelectedSortValue(selectedSortValue);
-        setSelectedSortColumn(selectedSortColumn);
+        const selectedField = event.target.name;
+
+        if (selectedField === 'sort') {
+            setSelectedSortValue(selectedSortValue);
+        } else if (selectedField === 'sortcolumn') {
+            setSelectedSortColumn(selectedSortValue);
+        }
     };
 
 
@@ -72,6 +74,7 @@ const TableSelection = () => {
 
         // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
         const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
+        console.log(dataURL)
 
         if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
@@ -92,33 +95,28 @@ const TableSelection = () => {
         const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
         const fullPath = baseImagePath + item.imagePath;
         const mainClass = item.mainclass;
+        const itemProductCode = item.productCode;
+        console.log('itemProductCode:', itemProductCode);
 
         const requestData = {
             image_path: fullPath,
             mainclass: mainClass
         };
 
-        const infoProductCode = item.productCode;
-
-        axios.post('http://10.125.121.170:8080/predict', requestData, mainClass,{
+        axios.post('http://10.125.121.170:8080/predict', requestData, {
             headers: {
                 'Content-Type': 'application/json',
             },
         })
             .then((response) => {
                 const { similar_item_urls } = response.data || {};
-
-                console.log('similar_item_urls:', similar_item_urls);
-
-                // 페이지 이동 시 infoProductCode를 넘김
-                navigate('/item_info', { state: { similarItemPaths: similar_item_urls, infoProductCode } });
+                console.log(similar_item_urls)
+                navigate(`/item_info?infoProductCode=${itemProductCode}`);
             })
             .catch((error) => {
                 console.error(error);
             });
     };
-
-
 
     const handleSearch = () => {
         if (!searchQuery.trim()) {
@@ -287,6 +285,7 @@ const TableSelection = () => {
                         className="select_sort"
                         onChange={(e) => handleSortChange(e)}
                         defaultValue={'desc'}
+                        name="sort"
                     >
                         <MenuItem value="none">선택</MenuItem>
                         <MenuItem value="asc">오름차순</MenuItem>
@@ -299,6 +298,7 @@ const TableSelection = () => {
                         className="select_sort_ascdesc"
                         onChange={(e) => handleSortChange(e)}
                         defaultValue={'totalsale'}
+                        name="sortcolumn"
                     >
                         <MenuItem value="none">선택</MenuItem>
                         <MenuItem value="totalsale">판매량순</MenuItem>
