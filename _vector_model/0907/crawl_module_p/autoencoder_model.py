@@ -37,19 +37,38 @@ class Autoencoder:
         # 모델 컴파일
         self.autoencoder_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['mse'])
 
-    # def train_model(self, train_images, test_images):
-    #     self.autoencoder_model.fit(
-    #         train_images, train_images,
-    #         epochs=50,
-    #         batch_size=128,
-    #         shuffle=True,
-    #         validation_data=(test_images, test_images)
-    #     )
+    def train_model(self, train_images, test_images):
+        history = self.autoencoder_model.fit(
+            train_images, train_images,
+            epochs=50,
+            batch_size=128,
+            shuffle=True,
+            validation_data=(test_images, test_images)
+        )
+        #손실이랑 mse()
+        train_loss = history.history['loss']
+        val_loss = history.history['val_loss']
+        train_mse = history.history['mse']
+        val_mse = history.history['val_mse']
+
+        # 학습 과정도 보자
+        print("Train Loss: ", train_loss)
+        print("Validation Loss: ", val_loss)
+        print("Train MSE: ", train_mse)
+        print("Validation MSE: ", val_mse)
+        
+        self.save_model
+
+        # 인코딩 및 디코딩까지 하는 모델. 난 안쓸거.(잠재벡터 뽑기만 하면 돼)
+        
 
     def save_model(self, path='autoencoder_model.h5'):
         self.autoencoder_model.save(path)
 
     def extract_latent_vectors(self):
+        if self.autoencoder_model is None:
+            print("Error: Autoencoder model is not built.")
+            return None
         # 잠재 벡터 추출 모델 저장 (인코더 부분만)
         self.encoder_model = Model(inputs=self.autoencoder_model.input, outputs=self.autoencoder_model.layers[-7].output)
         self.encoder_model.save("encoder_model.h5")
@@ -69,5 +88,11 @@ class Autoencoder:
             return None
         return latent_vectors
     
-    def load_model(self, path='autoencoder_model.h5'):
-        self.autoencoder_model = load_model(path)
+    def load_model(self, path='encoder_model.h5'):
+        try:
+            self.encoder_model = load_model(path)
+        except:
+            print("Model not found, creating a new one.")
+            self.build_model()
+            self.encoder_model = Model(inputs=self.autoencoder_model.input, outputs=self.autoencoder_model.layers[-7].output)
+            self.encoder_model.save("encoder_model.h5")

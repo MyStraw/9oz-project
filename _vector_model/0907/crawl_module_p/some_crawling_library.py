@@ -13,6 +13,7 @@ import csv
 
 class QueenitCrawler:
     def __init__(self, save_path='C:/queenit'):
+        self.driver = webdriver.Chrome(executable_path="chromedriver.exe")
         self.save_path = save_path
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)
@@ -33,14 +34,16 @@ class QueenitCrawler:
         except NoSuchElementException:
             print("앱 다음에 받기 버튼을 찾지 못함ㅠ")
         #html/body/div/div/div/div/div[4]/div[2]/div[3]/div/div[1]/div[1]/span/img
+        
         # 상의 클릭
-        upper_button = driver.find_element(By.XPATH, "/html/body/div/div/div/div/div/div/div[5]/div[1]/div")
+        #upper_button = driver.find_element(By.XPATH, "/html/body/div/div/div/div/div/div/div[5]/div[1]/div")
+        upper_button = driver.find_element(By.XPATH, "/html/body/div/div/div/div/div/div/div[5]/div[1]/div/div[1]")
         driver.execute_script("arguments[0].click();", upper_button)
         print("상의 클릭.")
         time.sleep(10)
 
 
-        for _ in range(200):
+        for _ in range(4):
             driver.execute_script("window.scrollTo(10, document.body.scrollHeight);")
             time.sleep(7)
 
@@ -56,71 +59,45 @@ class QueenitCrawler:
         image_urls = set()
 
         #찾을 div
-        product_blocks = soup.find_all('div', class_='css-7ny53m')
+        #product_blocks = soup.find_all('div', class_='css-7ny53m')
 
-        # 이미지 다운로드 횟수 제한
-        max_images = 1100
-        images_downloaded = 0
+        # 찾을 div
+        try:
+            product_blocks = soup.find_all('div', class_='css-7ny53m')  # 실제 CSS 선택자로 교체
+        except AttributeError:
+            print("WebDriver 객체에 'find_elements_by_css_selector' 메소드가 없습니다.")
+            driver.quit()
+            exit()
 
-        for block in product_blocks:
-            if images_downloaded >= max_images:
-                break
+        for i, block in enumerate(product_blocks):
+            img_element = block.find_element_by_css_selector('img')  # 실제 CSS 선택자로 교체
+            img_url = img_element.get_attribute('src')
+            img_name = f"product_{i}.jpg"
 
-            name_element = block.find('span', class_='MuiTypography-BodyS')
-            name = name_element.find('div', class_='MuiBox-root').text.strip()
-            
-            price_element = block.find('span', class_='MuiTypography-LabelM')
-            price = price_element.find('div', class_='MuiBox-root').text.strip()
+            if img_url not in image_urls:
+                # 이미지 저장
+                with open(os.path.join(self.save_path, img_name), 'wb') as f:
+                    img_data = requests.get(img_url).content
+                    f.write(img_data)
 
-            rating_element = block.find('span', class_='MuiTypography-LabelXS')
-            rating = rating_element.find('div', class_='MuiBox-root').text.strip() if rating_element else ""
-            
-
-            # 이미지 URL 추출 - 두 번째 <img> 태그 선택
-            img_elements = block.find_all('img')
-            image_url = ""
-            for img_element in img_elements:
-                if "https://" in img_element['src']:
-                    image_url = img_element['src']
-                    break
-            
-            if not image_url:
-                continue
-
-            if image_url and image_url not in image_urls:
+                # 상품 정보 저장 (예시)
+                name = "example_name"
+                price = "example_price"
                 products.append({
                     'Name': name,
                     'Price': price,
-                    'Rating': rating,
-                    'ImageURL': image_url
+                    'ImageURL': img_url
                 })
-                image_urls.add(image_url)
-                images_downloaded += 1
-                time.sleep(2)
-                
 
+                image_urls.add(img_url)
 
-        
-        for i, img_tag in enumerate(img_tags):
-            img_url = img_tag['src']
-            img_name = f"product_{i}.jpg"
-
-            # 이미지 저장
-            with open(os.path.join(self.save_path, img_name), 'wb') as f:
-                img_data = requests.get(img_url).content
-                f.write(img_data)
-
-            # 상품 링크 저장
-            product_link = link_tags[i]['href']
-            self.product_links.append(product_link)
-            
         # CSV 파일로 상품 정보 저장
         with open(self.csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['Name', 'Price', 'Rating', 'ImageURL']
+            fieldnames = ['Name', 'Price', 'ImageURL']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             writer.writerows(products)
-    
+
         # Selenium 드라이버 종료
         driver.quit()
 

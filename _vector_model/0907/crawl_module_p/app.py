@@ -26,10 +26,11 @@ def crawl():
 
     # Step 3: 잠재 벡터 추출 및 모델 저장
     
-    autoencoder = Autoencoder()
     # 모델 빌드 (인코더 모델)
+    autoencoder = Autoencoder()    
     autoencoder.build_model()
     latent_vectors = autoencoder.extract_latent_vectors()
+    
     if latent_vectors is None:
     # 에러 처리
         print("Error: Latent vectors are not properly generated.")
