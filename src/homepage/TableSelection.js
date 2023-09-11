@@ -74,7 +74,6 @@ const TableSelection = () => {
 
         // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
         const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
-        console.log(dataURL)
 
         if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
@@ -88,15 +87,14 @@ const TableSelection = () => {
                 .finally(() => setIsLoading(false));
         }
     };
-
     const navigate = useNavigate();
-
     const handleImageClick = (item) => {
+
+
         const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
         const fullPath = baseImagePath + item.imagePath;
         const mainClass = item.mainclass;
         const itemProductCode = item.productCode;
-        console.log('itemProductCode:', itemProductCode);
 
         const requestData = {
             image_path: fullPath,
@@ -109,14 +107,21 @@ const TableSelection = () => {
             },
         })
             .then((response) => {
-                const { similar_item_urls } = response.data || {};
-                console.log(similar_item_urls)
-                navigate(`/item_info?infoProductCode=${itemProductCode}`);
+                // 응답 데이터를 확인하여 데이터가 예상대로 들어 있는지 확인합니다.
+                console.log(response.data); // 응답 데이터를 콘솔에 출력해 보세요.
+
+                // 유사 상품 URL 배열을 추출합니다.
+                const similarItemUrls = response.data.similar_item_urls;
+                console.log(similarItemUrls)
+
+                // NextPage 컴포넌트로 넘기기 위해 페이지 이동합니다.
+                navigate('/item_info?infoProductCode=' + itemProductCode, { similarItemUrls });
             })
             .catch((error) => {
                 console.error(error);
             });
     };
+
 
     const handleSearch = () => {
         if (!searchQuery.trim()) {
