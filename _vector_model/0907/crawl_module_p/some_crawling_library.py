@@ -13,7 +13,7 @@ import csv
 
 class QueenitCrawler:
     def __init__(self, save_path='C:/queenit'):
-        self.driver = webdriver.Chrome(executable_path="chromedriver.exe")
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         self.save_path = save_path
         if not os.path.exists(self.save_path):
             os.makedirs(self.save_path)

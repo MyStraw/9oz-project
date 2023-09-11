@@ -77,6 +77,30 @@ class Autoencoder:
         # 여기서는 self.image_dir 폴더에서 이미지를 로드하고 전처리한다고 가정합니다.
         image_files = os.listdir(self.image_dir)
         images = [load_and_process_single_image(os.path.join(self.image_dir, f)) for f in image_files]  
+        
+        # 이미지의 shape을 확인합니다.
+        for i, img in enumerate(images):
+            if img is not None:
+                if img.shape != (32, 32, 3):  # 이 부분은 원하는 shape에 맞게 수정합니다.
+                    print(f"이미지 {i}의 shape이 비정상입니다: {img.shape}")
+
+        # None 값을 제거합니다.
+        images = [img for img in images if img is not None]
+
+        # NumPy 배열로 변환합니다.
+        if len(images) == 0:
+            return None
+
+        images = np.array(images)  # 이 부분에서 에러가 발생했을 것입니다.
+        
+        
+        
+        
+        
+        
+        
+        
+        
         images = [img for img in images if img is not None]  # None 제거
         if len(images) == 0:
             return None

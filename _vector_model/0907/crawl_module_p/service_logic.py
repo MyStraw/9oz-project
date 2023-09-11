@@ -33,5 +33,5 @@ def predict_similar_items(base64_image):
     ranked_items = same_cluster_items.sort_values(by='cluster_center_distance')
     
     # 결과 반환 (이미지 경로 목록)
-    return ranked_items['image_path'].tolist()
+    return ranked_items['image_path'].tolist()[:10]
 
