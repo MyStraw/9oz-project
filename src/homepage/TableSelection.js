@@ -88,39 +88,42 @@ const TableSelection = () => {
         }
     };
     const navigate = useNavigate();
+
     const handleImageClick = (item) => {
-
-
-        const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
-        const fullPath = baseImagePath + item.imagePath;
-        const mainClass = item.mainclass;
         const itemProductCode = item.productCode;
+        navigate('/item_info?infoProductCode=' + itemProductCode);
 
-        const requestData = {
-            image_path: fullPath,
-            mainclass: mainClass
-        };
-
-        axios.post('http://10.125.121.170:8080/predict', requestData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => {
-                // 응답 데이터를 확인하여 데이터가 예상대로 들어 있는지 확인합니다.
-                console.log(response.data); // 응답 데이터를 콘솔에 출력해 보세요.
-
-                // 유사 상품 URL 배열을 추출합니다.
-                const similarItemUrls = response.data.similar_item_urls;
-                console.log(similarItemUrls)
-
-                // NextPage 컴포넌트로 넘기기 위해 페이지 이동합니다.
-                navigate('/item_info?infoProductCode=' + itemProductCode, { similarItemUrls });
-            })
-            .catch((error) => {
-                console.error(error);
-            });
     };
+
+
+    // const handleImageClick = (item) => {
+    //     const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
+    //     const fullPath = baseImagePath + item.imagePath;
+    //     const mainClass = item.mainclass;
+    //     const itemProductCode = item.productCode;
+
+    //     const requestData = {
+    //         image_path: fullPath,
+    //         mainclass: mainClass
+    //     };
+
+    //     axios.post('http://10.125.121.170:8080/predict', requestData, {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //     })
+    //         .then((response) => {
+    //             console.log(response.data);
+    //             const similarItemUrls = response.data.similar_item_urls;
+    //             console.log(similarItemUrls)
+
+    //             // NextPage 컴포넌트로 넘기기 위해 페이지 이동합니다.
+    //             navigate('/item_info?infoProductCode=' + itemProductCode, { similarItemUrls });
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    // };
 
 
     const handleSearch = () => {
@@ -260,7 +263,7 @@ const TableSelection = () => {
     const renderItems = () => {
         return currentItems.map((item) => (
             <div key={item.id} className={Styles.imageGroupItem}>
-                <Link to="/item_info" onClick={() => handleImageClick(item)}>
+                <Link to={`/item_info?infoProductCode=${item.productCode}`} onClick={handleImageClick}>
                     <img
                         src={`http://10.125.121.170:8080/images/${item.imagePath}`}
                         alt='나인오즈 이미지'
@@ -268,12 +271,13 @@ const TableSelection = () => {
                         className={Styles.nineozimg}
                     />
                 </Link>
+
                 <div className={Styles.product_info}>
                     <p className={Styles.prdname}>제품명: {item.productName}</p>
                     <p>제품코드: {item.productCode}</p>
                     <p>가격: {item.salePrice}원(￦)</p>
                 </div>
-            </div>
+            </div >
         ));
     };
 

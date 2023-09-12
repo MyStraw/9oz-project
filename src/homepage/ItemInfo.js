@@ -4,17 +4,13 @@ import Button from '@mui/material/Button';
 import Styles from './NextPage.module.css';
 import axios from 'axios';
 
-const NextPage = (props) => {
+const ItemInfo = (props) => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const itemProductCode = searchParams.get('infoProductCode');
 
-    // 데이터를 props.location.state에서 가져오도록 수정합니다.
-    const similarItemUrls = (props.location.state && props.location.state.similarItemUrls) || [];
-    console.log(props.location);
-
-
     const [productDetails, setProductDetails] = useState(null);
+    const [similarItemUrls, setSimilarItemUrls] = useState([]); // similarItemUrls를 state로 관리
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -24,6 +20,9 @@ const NextPage = (props) => {
                 const response = await axios.get(productcodeURL);
                 const productDetailsData = response.data[0];
                 setProductDetails(productDetailsData);
+
+                // 이 부분에서 similarItemUrls를 설정
+                postSimilarImage(productDetailsData); // postSimilarImage 함수를 호출하여 데이터를 가져옵니다.
             } catch (error) {
                 console.error('상품 세부 정보를 불러오는데 실패했습니다.', error);
             }
@@ -32,8 +31,35 @@ const NextPage = (props) => {
         fetchProductDetails();
     }, [itemProductCode]);
 
+    const postSimilarImage = (item) => {
+        const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
+        const fullPath = baseImagePath + item.imagePath;
+        const mainClass = item.mainclass;
+        const itemProductCode = item.productCode;
+
+        const requestData = {
+            image_path: fullPath,
+            mainclass: mainClass
+        };
+
+        axios.post('http://10.125.121.170:8080/predict', requestData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                console.log(response.data);
+                const similarItemUrls = response.data.similar_item_urls;
+
+                setSimilarItemUrls(similarItemUrls); // similarItemUrls 상태를 설정합니다.
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
     return (
-        <div>
+        <div className={Styles.iteminfo_recommand}>
             {productDetails ? (
                 <>
                     <img
@@ -48,19 +74,23 @@ const NextPage = (props) => {
 
                     <Link to="/"><Button>뒤로 가기</Button></Link>
 
-                    <div>
+                    <div className={Styles.recommandImg}>
                         {similarItemUrls.length > 0 ? (
-                            similarItemUrls.map((url, index) => (
-                                <img
-                                    key={index}
-                                    src={url}
-                                    alt={`상품 이미지`}
-                                />
-                            ))
+                            similarItemUrls.map((url, index) => {
+                                const fileNameWithExtension  = url.substring(url.lastIndexOf('/') + 1);
+                                const fileNameWithoutExtension = fileNameWithExtension.replace(/\.[^/.]+$/, "");
+                                return (
+                                    <div key={index}>
+                                        <img src={url} alt={`상품 이미지`} className={Styles.queenitImg} />
+                                        <p className={Styles.queenitImgPtags}>{fileNameWithoutExtension}</p>
+                                    </div>
+                                );
+                            })
                         ) : (
                             <p>유사 상품 정보가 없습니다.</p>
                         )}
                     </div>
+
                 </>
             ) : (
                 <p>상품 정보 불러오는 중...</p>
@@ -69,4 +99,4 @@ const NextPage = (props) => {
     );
 };
 
-export default NextPage;
+export default ItemInfo;

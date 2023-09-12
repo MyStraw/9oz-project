@@ -1,12 +1,24 @@
 import React from 'react';
+import { Container, Paper, Typography, TextField, Button } from '@mui/material';
 
 const Login = () => {
   return (
-    <div>
-      <h2>Login 페이지</h2>
-      {/* 로그인 폼 및 컴포넌트를 추가하세요 */}
-    </div>
+    <Container maxWidth="sm">
+      <Paper elevation={3} style={{ padding: '60px', marginTop: '70px' }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          로그인
+        </Typography>
+        <form>
+          <TextField label="ID" variant="outlined" fullWidth margin="normal" />
+          <TextField label="Password" type="password" variant="outlined" fullWidth margin="normal" />
+          <Button variant="contained" color="primary" style={{ marginTop: '20px' }} fullWidth margin="normal">
+            로그인
+          </Button>
+        </form>
+      </Paper>
+    </Container>
   );
 }
 
 export default Login;
+

@@ -1,6 +1,111 @@
-.nineozimg {
-    width: 300px;
-    height: 350px;
-    margin: 0 auto;
-    /* 이미지를 수평 가운데로 정렬 */
+@media (min-width: 1024px) {
+    .iteminfo_recommand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nineozimg {
+        width: 300px;
+        height: 350px;
+        margin: 0 auto;
+        /* 이미지를 수평 가운데로 정렬 */
+    }
+
+    .recommandImg {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .queenitImg {
+        width: 300px;
+        height: 350px;
+        margin-bottom: 35px;
+        margin-left: 40px;
+        margin-top: 40px;
+    }
+
+    .queenitImgPtags {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        margin-top: -25px;
+        margin-bottom: -25px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .iteminfo_recommand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nineozimg {
+        width: 300px;
+        height: 350px;
+        margin: 0 auto;
+        /* 이미지를 수평 가운데로 정렬 */
+    }
+
+    .recommandImg {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .queenitImg {
+        width: 240px;
+        height: 300px;
+        margin-bottom: 35px;
+        margin-left: 36px;
+        margin-top: 40px;
+    }
+
+    .queenitImgPtags {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        margin-top: -25px;
+        margin-bottom: -25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .iteminfo_recommand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nineozimg {
+        width: 300px;
+        height: 350px;
+        margin: 0 auto;
+        /* 이미지를 수평 가운데로 정렬 */
+    }
+
+    .recommandImg {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .queenitImg {
+        width: 175px;
+        height: 200px;
+        margin-bottom: 30px;
+        margin-left: 27px;
+        margin-right: 4px;
+        margin-top: 40px;
+    }
+
+    .queenitImgPtags {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        margin-top: -25px;
+        margin-bottom: -25px;
+    }
 }

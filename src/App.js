@@ -4,7 +4,8 @@ import TableSelection from './homepage/TableSelection';
 import './App.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import NextPage from "./homepage/NextPage";
+import ItemInfo from "./homepage/ItemInfo";
+import Login from "./login/Login";
 
 function App() {
   const theme = createTheme({
@@ -32,13 +33,16 @@ function App() {
           </a>
           <hr />
           <div className="login-button-container">
-            <Button>Login</Button> {/* 로그인 버튼 */}
+            <Link to="/login">
+              <Button style={{ border: '1px solid #000', color: 'black' }}>Login</Button>
+            </Link>
           </div>
 
           <div className="app-container">
             <Routes>
               <Route path="/" element={<TableSelection />} />
-              <Route path="/item_info" element={<NextPage />} />
+              <Route path="/item_info" element={<ItemInfo />} />
+              <Route path="login" element={<Login />} />
             </Routes>
           </div>
         </>
