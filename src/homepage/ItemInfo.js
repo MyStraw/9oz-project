@@ -35,7 +35,6 @@ const ItemInfo = (props) => {
         const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
         const fullPath = baseImagePath + item.imagePath;
         const mainClass = item.mainclass;
-        const itemProductCode = item.productCode;
 
         const requestData = {
             image_path: fullPath,
@@ -48,7 +47,6 @@ const ItemInfo = (props) => {
             },
         })
             .then((response) => {
-                console.log(response.data);
                 const similarItemUrls = response.data.similar_item_urls;
 
                 setSimilarItemUrls(similarItemUrls); // similarItemUrls 상태를 설정합니다.
@@ -81,7 +79,7 @@ const ItemInfo = (props) => {
                                 const fileNameWithoutExtension = fileNameWithExtension.replace(/\.[^/.]+$/, "");
                                 return (
                                     <div key={index}>
-                                        <img src={url} alt={`상품 이미지`} className={Styles.queenitImg} />
+                                        <img src={url} alt={`추천 이미지`} className={Styles.queenitImg} />
                                         <p className={Styles.queenitImgPtags}>{fileNameWithoutExtension}</p>
                                     </div>
                                 );

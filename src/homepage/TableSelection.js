@@ -95,37 +95,6 @@ const TableSelection = () => {
 
     };
 
-
-    // const handleImageClick = (item) => {
-    //     const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
-    //     const fullPath = baseImagePath + item.imagePath;
-    //     const mainClass = item.mainclass;
-    //     const itemProductCode = item.productCode;
-
-    //     const requestData = {
-    //         image_path: fullPath,
-    //         mainclass: mainClass
-    //     };
-
-    //     axios.post('http://10.125.121.170:8080/predict', requestData, {
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //     })
-    //         .then((response) => {
-    //             console.log(response.data);
-    //             const similarItemUrls = response.data.similar_item_urls;
-    //             console.log(similarItemUrls)
-
-    //             // NextPage 컴포넌트로 넘기기 위해 페이지 이동합니다.
-    //             navigate('/item_info?infoProductCode=' + itemProductCode, { similarItemUrls });
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-    // };
-
-
     const handleSearch = () => {
         if (!searchQuery.trim()) {
             return;
@@ -136,8 +105,7 @@ const TableSelection = () => {
         axios.get(searchUrl)
             .then(response => {
                 const data = response.data;
-                console.log('검색 결과:', data);
-
+                
                 const products = data.map(item => ({
                     productCode: item.productCode,
                     productName: item.productName,
