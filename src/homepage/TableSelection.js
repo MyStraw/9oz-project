@@ -10,9 +10,10 @@ import TextField from '@mui/material/TextField';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useMediaQuery } from '@mui/material';
-import BarChart from '../charts/BarChart';
+import BarChart from '../components/BarChart';
+import Footer from "../components/Footer";
 
-const TableSelection = () => {
+const TableSelection = ({ selectedProduct }) => {
     const StyledBox = styled(Box)`
         & button {
             m: 1;
@@ -39,7 +40,7 @@ const TableSelection = () => {
     const [itemData, setItemData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedSortValue, setSelectedSortValue] = useState('desc');
     const [selectedSortColumn, setSelectedSortColumn] = useState('totalsale');
     const [currentPage, setCurrentPage] = useState(1);
@@ -105,7 +106,7 @@ const TableSelection = () => {
         axios.get(searchUrl)
             .then(response => {
                 const data = response.data;
-                
+
                 const products = data.map(item => ({
                     productCode: item.productCode,
                     productName: item.productName,
@@ -255,7 +256,7 @@ const TableSelection = () => {
         <>
             <div className={`${Styles.main_input} ${Styles.mobileCenter}`}>
                 <div className={Styles.searchContainer}>
-                    <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} />
+                    <TextField id="outlined-basic" label="검색어 입력" variant="outlined" size="small" onChange={(e) => setSearchQuery(e.target.value)} value={searchQuery} />
                 </div>
                 <FormControl variant="outlined" size="small">
                     <Select
@@ -297,19 +298,22 @@ const TableSelection = () => {
                 <BarChart selectedSortValue={selectedSortValue} selectedSortColumn={selectedSortColumn} selectedCategory={selectedCategory} subCategory={selectedSubCategory} />
             </div>
             {isDataLoaded && (
-                <div className={Styles.imageGroupContainer}>
-                    {isLoading ? (
-                        <p>로딩중</p>
-                    ) : (
-                        <>
-                            {renderItems()}
-                            <div className={`${Styles.centered}`}>
-                                {renderPagination()}
-                            </div>
-                        </>
-                    )}
-                </div>
+                <>
+                    <div className={Styles.imageGroupContainer}>
+                        {isLoading ? (
+                            <p>로딩중</p>
+                        ) : (
+                            <>
+                                {renderItems()}
+                                <div className={`${Styles.centered}`}>
+                                    {renderPagination()}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </>
             )}
+            <Footer />
         </>
     );
 }

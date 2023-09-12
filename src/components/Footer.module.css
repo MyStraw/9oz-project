@@ -1,0 +1,7 @@
+.footer_container {
+    position: inherit;
+    width: 100%;
+    background-color: #f8f8f8;
+    /* Footer 배경색을 원하는 색상으로 변경하세요 */
+    text-align: center;
+}

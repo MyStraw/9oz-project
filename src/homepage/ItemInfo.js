@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Styles from './NextPage.module.css';
+import Styles from './ItemInfo.module.css';
 import axios from 'axios';
 
 const ItemInfo = (props) => {
@@ -48,8 +48,7 @@ const ItemInfo = (props) => {
         })
             .then((response) => {
                 const similarItemUrls = response.data.similar_item_urls;
-
-                setSimilarItemUrls(similarItemUrls); // similarItemUrls 상태를 설정합니다.
+                setSimilarItemUrls(similarItemUrls);
             })
             .catch((error) => {
                 console.error(error);
@@ -75,7 +74,7 @@ const ItemInfo = (props) => {
                     <div className={Styles.recommandImg}>
                         {similarItemUrls.length > 0 ? (
                             similarItemUrls.map((url, index) => {
-                                const fileNameWithExtension  = url.substring(url.lastIndexOf('/') + 1);
+                                const fileNameWithExtension = url.substring(url.lastIndexOf('/') + 1);
                                 const fileNameWithoutExtension = fileNameWithExtension.replace(/\.[^/.]+$/, "");
                                 return (
                                     <div key={index}>
@@ -85,13 +84,19 @@ const ItemInfo = (props) => {
                                 );
                             })
                         ) : (
-                            <p>유사 상품 정보가 없습니다.</p>
+                            <>
+                                <p>추천 옷 정보가 없습니다.</p>
+                                <Link to="/"><Button>뒤로 가기</Button></Link>
+                            </>
                         )}
                     </div>
 
                 </>
             ) : (
-                <p>상품 정보 불러오는 중...</p>
+                <>
+                    <p>상품 정보 불러오는 중...</p>
+                    <Link to="/"><Button>뒤로 가기</Button></Link>
+                </>
             )}
         </div>
     );

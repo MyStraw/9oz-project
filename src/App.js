@@ -37,7 +37,6 @@ function App() {
               <Button style={{ border: '1px solid #000', color: 'black' }}>Login</Button>
             </Link>
           </div>
-
           <div className="app-container">
             <Routes>
               <Route path="/" element={<TableSelection />} />
