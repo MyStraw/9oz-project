@@ -50,7 +50,9 @@ def predict():
     
     # "mainclass" 값 출력
     mainclass_value = data.get('mainclass', None)  # 'mainclass' 키가 없을 경우 None을 반환
+    semiclass_value = data.get('semiclass', None)
     print(f"mainclass: {mainclass_value}")
+    print(f"semiclass : {semiclass_value}")
     base64_image = data['image_data']
     # 비슷한 아이템 찾기
     similar_item_paths = predict_similar_items(base64_image, mainclass_value)
