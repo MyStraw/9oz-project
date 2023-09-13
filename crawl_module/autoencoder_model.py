@@ -39,7 +39,7 @@ class Autoencoder:
 
     def build_model(self):
         # VGG16 모델 불러오기
-        vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(32, 32, 3))
+        vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
         vgg16.trainable = False  # Freeze the VGG16 layers
 
         # 오토인코더 모델 초기화
@@ -161,7 +161,7 @@ class Autoencoder:
         current_time = datetime.now().strftime("%Y%m%d%H%M%S")
 
         # 폴더 이름에 날짜와 시간 추가하여 처음부터 만들기
-        new_folder = os.path.join(self.image_dir, f'background_removed_{current_time}')
+        new_folder = os.path.join('C:/queenit_removed/', f'background_removed_{current_time}')
 
         # 폴더 생성
         try:

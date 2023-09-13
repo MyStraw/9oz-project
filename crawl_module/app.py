@@ -54,6 +54,7 @@ def predict():
     print(f"mainclass: {mainclass_value}")
     print(f"semiclass : {semiclass_value}")
     base64_image = data['image_data']
+    
     # 비슷한 아이템 찾기
     similar_item_paths = predict_similar_items(base64_image, mainclass_value)
     

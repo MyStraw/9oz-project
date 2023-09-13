@@ -30,7 +30,7 @@ def load_and_process_single_image(image_path):
         return None  # 디렉토리면 None 반환
     
     img = Image.open(image_path)
-    img = img.resize((32, 32))  # 모델의 입력 크기에 맞춰 이미지 크기를 조정합니다.
+    img = img.resize((416, 416))  # 모델의 입력 크기에 맞춰 이미지 크기를 조정합니다.
     img_array = np.array(img)
     
     if len(img_array.shape) == 2:
