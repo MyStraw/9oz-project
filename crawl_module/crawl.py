@@ -8,39 +8,43 @@ from selenium.common.exceptions import NoSuchElementException
 import requests
 from urllib.parse import urlparse
 import re
+from concurrent.futures import ThreadPoolExecutor
 
 # 파일 이름을 깔끔하게 정리하는 함수
 def clean_filename(filename):
     cleaned_filename = re.sub(r'[\\/*?:"<>|]', '_', filename)
     return cleaned_filename
 
-# 이미지를 다운로드하는 함수
-def download_images(csv_path, save_folder, session):
+def download_single_image(row, save_folder, headers):
+    image_url = row['ImageURL']
+    parsed_url = urlparse(image_url)
+    filename = clean_filename(row['Name']) + os.path.splitext(parsed_url.path)[1]
+    save_path = os.path.join(save_folder, filename)
+
+    response = requests.get(image_url, headers=headers, stream=True)
+    if response.status_code == 200:
+        with open(save_path, 'wb') as file:
+            response.raw.decode_content = True
+            file.write(response.content)
+        print("이미지 다운로드 완료:", save_path)
+    else:
+        print("이미지 다운로드 실패:", image_url)
+
+def download_images(csv_path, save_folder, session, max_workers=10):
     if not os.path.exists(save_folder):
         os.makedirs(save_folder)
-    headers = {'User-Agent': 'Mozilla/5.0'}  # User-Agent 설정
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    
     with open(csv_path, 'r', encoding='cp949') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        for row in reader:
-            image_url = row['ImageURL']
-            parsed_url = urlparse(image_url)
-            filename = clean_filename(row['Name']) + os.path.splitext(parsed_url.path)[1]
-            save_path = os.path.join(save_folder, filename)
-
-            response = requests.get(image_url,headers=headers, stream=True)
-            if response.status_code == 200:
-                with open(save_path, 'wb') as file:
-                    response.raw.decode_content = True
-                    file.write(response.content)
-                print("이미지 다운로드 완료:", save_path)
-            else:
-                print("이미지 다운로드 실패:", image_url)
+        reader = list(csv.DictReader(csvfile))
+        
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        executor.map(download_single_image, reader, [save_folder]*len(reader), [headers]*len(reader))
 
 
 class QueenitCrawling:    
     @staticmethod
-    def queenit_crawling(url, path_input, category):
+    def queenit_crawling(url, path_input, category, repeat, max_images=1000):
         driver = webdriver.Chrome()
         path = os.path.join(path_input, category)
 
@@ -60,9 +64,9 @@ class QueenitCrawling:
         category_xpath = {
             'top': "/html/body/div/div/div/div/div/div/div[5]/div[1]/div",
             "onepiece":"/html/body/div/div/div/div/div/div/div[5]/div[2]/div",
-            'pants': "/html/body/div/div/div/div/div/div/div[5]/div[3]/div",
+            'bottom': "/html/body/div/div/div/div/div/div/div[5]/div[3]/div",
             'outer': "/html/body/div/div/div/div/div/div/div[5]/div[4]/div",
-            'skirt': "/html/body/div/div/div/div/div/div/div[5]/div[6]/div"        
+            'skirt': "/html/body/div/div/div/div/div/div/div[5]/div[6]/div"      
             
         }
         
@@ -84,9 +88,9 @@ class QueenitCrawling:
         time.sleep(3)
 
 
-        for _ in range(2):
+        for _ in range(repeat):
             driver.execute_script("window.scrollTo(10, document.body.scrollHeight);")
-            time.sleep(1)
+            time.sleep(2)
 
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
@@ -100,8 +104,7 @@ class QueenitCrawling:
         #찾을 div
         product_blocks = soup.find_all('div', class_='css-7ny53m')
 
-        # 이미지 다운로드 횟수 제한
-        max_images = 1000
+        # 이미지 다운로드 횟수 제한      
         images_downloaded = 0
 
         for block in product_blocks:
@@ -152,13 +155,13 @@ class QueenitCrawling:
         # 크롤링 후 이미지 다운로드
         download_images(csv_path, path, session)
 
-if __name__ == '__main__':
-    url = 'https://web.queenit.kr/'
-    path_input = 'c:/queenit/'    
-     # 'top'과 'under'에 대한 크롤링을 순차적으로 실행
-    QueenitCrawling.queenit_crawling(url, path_input, 'top')
-    QueenitCrawling.queenit_crawling(url, path_input, 'onepiece')
-    QueenitCrawling.queenit_crawling(url, path_input, 'pants')    
-    QueenitCrawling.queenit_crawling(url, path_input, 'outer')
-    QueenitCrawling.queenit_crawling(url, path_input, 'skirt')
+# if __name__ == '__main__':
+#     url = 'https://web.queenit.kr/'
+#     path_input = 'c:/queenit/'    
+#      # 'top'과 'under'에 대한 크롤링을 순차적으로 실행
+#     QueenitCrawling.queenit_crawling(url, path_input, 'top')
+#     QueenitCrawling.queenit_crawling(url, path_input, 'onepiece')
+#     QueenitCrawling.queenit_crawling(url, path_input, 'bottom')    
+#     QueenitCrawling.queenit_crawling(url, path_input, 'outer')
+#     QueenitCrawling.queenit_crawling(url, path_input, 'skirt')
     

@@ -1,8 +1,20 @@
+import pandas as pd
 import csv
 
 def save_to_csv_and_hash(df, csv_path='latent_vectors_with_all_info.csv'):
-    # DataFrame을 CSV 파일로 저장
-    df.to_csv(csv_path, index=False, encoding='cp949')
+    try:
+        # 기존 CSV 파일을 불러옴
+        existing_df = pd.read_csv(csv_path, encoding='cp949')
+    except FileNotFoundError:
+        # 파일이 없으면 새로 저장
+        df.to_csv(csv_path, index=False, encoding='cp949')
+        return
+
+    # 기존 DataFrame과 새로운 DataFrame을 결합
+    combined_df = pd.concat([existing_df, df], ignore_index=True)
+    
+    # 다시 CSV 파일로 저장
+    combined_df.to_csv(csv_path, index=False, encoding='cp949')
     
     # 해시 테이블로 데이터 로딩
     hash_table = {}
@@ -14,7 +26,6 @@ def save_to_csv_and_hash(df, csv_path='latent_vectors_with_all_info.csv'):
                 'latent_vector': lines['latent_vector'],
                 'cluster_label': lines['cluster_label'],
                 'cluster_center_distance': lines['cluster_center_distance'],
-                # 'tsne-2d-one': lines['tsne-2d-one'],
-                # 'tsne-2d-two': lines['tsne-2d-two'],
+                'mainclass': lines['mainclass']  # mainclass 추가
             }
     return hash_table

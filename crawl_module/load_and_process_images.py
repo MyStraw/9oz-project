@@ -3,11 +3,6 @@ import numpy as np
 import os
 import io
 
-# def load_images_from_folder(folder_path):
-#     image_files = os.listdir(folder_path)
-#     images = [image.load_img(os.path.join(folder_path, img_file), target_size=(28, 28)) for img_file in image_files]
-#     return np.array([image.img_to_array(img) for img in images])
-
 
 # Blob to PNG 함수
 def convert_blob_to_png(blob_path, png_path):
