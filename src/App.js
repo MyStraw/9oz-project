@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import ItemInfo from "./homepage/ItemInfo";
 import Login from "./login/Login";
+import NewMember from "./login/NewMember";
 
 function App() {
   const theme = createTheme({
@@ -42,6 +43,7 @@ function App() {
               <Route path="/" element={<TableSelection />} />
               <Route path="/item_info" element={<ItemInfo />} />
               <Route path="login" element={<Login />} />
+              <Route path="new-member" element={<NewMember />} />
             </Routes>
           </div>
         </>

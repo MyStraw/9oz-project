@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import axios from 'axios';
 
-const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, subCategory, onProductSelect }) => {
+const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, subCategory, selectedSubCategory, onProductSelect }) => {
   const [data, setData] = useState([]);
   const [showChart, setShowChart] = useState(false); // 데이터가 있는 경우에만 차트를 표시
 

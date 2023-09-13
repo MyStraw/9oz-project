@@ -144,8 +144,9 @@ const TableSelection = ({ selectedProduct }) => {
         return (
             <StyledBox sx={{ '& button': buttonStyle }}>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('top')}> 상의 </Button>
-                <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('bottom')}> 하의 </Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('outer')}> 아우터 </Button>
+                <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('bottom')}> 바지 </Button>
+                <Button variant="outlined" onMouseEnter={() => handleCategorySelect('bottom')} onClick={() => handleSubCategorySelect('skirt')}>스커트</Button>
                 <Button variant="outlined" size="large" onMouseEnter={() => handleCategorySelect('onepiece')} onClick={() => handleSubCategorySelect('onepiece')}> 원피스 </Button>
             </StyledBox>
         );
@@ -169,7 +170,6 @@ const TableSelection = ({ selectedProduct }) => {
                     <StyledBox sx={{ '& button': buttonStyle }}>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('pants')}>바지</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('denim')}>데님</Button>
-                        <Button variant="outlined" onClick={() => handleSubCategorySelect('skirt')}>스커트</Button>
                         <Button variant="outlined" onClick={() => handleSubCategorySelect('leggings')}>레깅스</Button>
                     </StyledBox>
                 )}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import Styles from './ItemInfo.module.css';
 import axios from 'axios';
 
@@ -10,7 +12,7 @@ const ItemInfo = (props) => {
     const itemProductCode = searchParams.get('infoProductCode');
 
     const [productDetails, setProductDetails] = useState(null);
-    const [similarItemUrls, setSimilarItemUrls] = useState([]); // similarItemUrls를 state로 관리
+    const [similarItemUrls, setSimilarItemUrls] = useState([]);
 
     useEffect(() => {
         const fetchProductDetails = async () => {
@@ -20,9 +22,7 @@ const ItemInfo = (props) => {
                 const response = await axios.get(productcodeURL);
                 const productDetailsData = response.data[0];
                 setProductDetails(productDetailsData);
-
-                // 이 부분에서 similarItemUrls를 설정
-                postSimilarImage(productDetailsData); // postSimilarImage 함수를 호출하여 데이터를 가져옵니다.
+                postSimilarImage(productDetailsData);
             } catch (error) {
                 console.error('상품 세부 정보를 불러오는데 실패했습니다.', error);
             }
@@ -35,10 +35,11 @@ const ItemInfo = (props) => {
         const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
         const fullPath = baseImagePath + item.imagePath;
         const mainClass = item.mainclass;
-
+        const semiClass = item.semiclass;
         const requestData = {
             image_path: fullPath,
-            mainclass: mainClass
+            mainclass: mainClass,
+            semiclass: semiClass
         };
 
         axios.post('http://10.125.121.170:8080/predict', requestData, {
@@ -78,15 +79,19 @@ const ItemInfo = (props) => {
                                 const fileNameWithoutExtension = fileNameWithExtension.replace(/\.[^/.]+$/, "");
                                 return (
                                     <div key={index}>
-                                        <img src={url} alt={`추천 이미지`} className={Styles.queenitImg} />
+                                        <a href={`https://web.queenit.kr/search?keyword=${fileNameWithoutExtension}`} target="_blank" rel="noopener noreferrer">
+                                            <img src={url} alt={`추천 이미지`} className={Styles.queenitImg} />
+                                        </a>
                                         <p className={Styles.queenitImgPtags}>{fileNameWithoutExtension}</p>
                                     </div>
                                 );
                             })
                         ) : (
                             <>
-                                <p>추천 옷 정보가 없습니다.</p>
-                                <Link to="/"><Button>뒤로 가기</Button></Link>
+                                <Box sx={{ display: 'flex' }}>
+                                    <p>상품 정보 불러오는 중...</p>
+                                    <CircularProgress />
+                                </Box>
                             </>
                         )}
                     </div>
@@ -94,8 +99,7 @@ const ItemInfo = (props) => {
                 </>
             ) : (
                 <>
-                    <p>상품 정보 불러오는 중...</p>
-                    <Link to="/"><Button>뒤로 가기</Button></Link>
+                    <p>추천 목록이 없습니다.</p>
                 </>
             )}
         </div>

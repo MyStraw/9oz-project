@@ -85,7 +85,6 @@
         margin: 5px;
     }
 
-    /* 페이지 버튼 스타일 */
     .pageButton {
         background-color: transparent;
         padding: 5px 10px;
@@ -98,12 +97,11 @@
         background-color: #81DAF5;
     }
 
-    /* 활성 페이지 버튼 스타일 */
     .activePage {
         background-color: aqua !important;
         color: black !important;
     }
-    /*바 그래프*/
+
     .barChartContainer {
         width: 800px;
         height: 40px;

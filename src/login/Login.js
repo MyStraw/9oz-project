@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Paper, Typography, TextField, Button } from '@mui/material';
+import { Container, Paper, Typography, TextField, Button, Link } from '@mui/material';
 
 const Login = () => {
   return (
@@ -15,10 +15,14 @@ const Login = () => {
             로그인
           </Button>
         </form>
+        <Typography align="center" style={{ marginTop: '15px' }}>
+          <Link href="/new-member" color="primary">
+            New Member? Click here!
+          </Link>
+        </Typography>
       </Paper>
     </Container>
   );
 }
 
 export default Login;
-
