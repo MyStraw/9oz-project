@@ -1,11 +1,9 @@
 package com.example.oz.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,7 +90,8 @@ public class ProductImageController {
 	//클릭했을때 상세페이지
 	@GetMapping("product/list/{product_code}")
 	public Iterable<ProductImage> getProductImagesByProductCode(@PathVariable String product_code) {
-        return productImageRepo.findByProductCode(product_code);
+        System.out.println("getProductImagesByProductCode : " + product_code );
+		return productImageRepo.findByProductCode(product_code);
     }
 	
 //    @GetMapping("/display") //내 로컬의 이미지를 표시하기
@@ -143,6 +140,7 @@ public class ProductImageController {
     public ResponseEntity<String> predictImage(@RequestBody Map<String, String> payload) throws IOException {
     	String imageName = payload.get("image_path");
     	String mainclass = payload.get("mainclass");
+    	String semiclass = payload.get("semiclass");
     	System.out.println("predictImage " + payload);
     	
         // 이미지 파일을 읽는 코드는 여기에 위치해야 합니다. (예: byte[] imageData = ...)
@@ -162,6 +160,7 @@ public class ProductImageController {
         Map<String, String> dataMap = new HashMap<>();
         dataMap.put("image_data", base64Encoded);
         dataMap.put("mainclass", mainclass);
+        dataMap.put("semiclass", semiclass);
         
         Mono<String> responseMono = webClient.post()
             .uri("/predict")
