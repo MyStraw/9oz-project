@@ -3,7 +3,6 @@ from clustering import perform_clustering
 from autoencoder_model import Autoencoder
 from flask_cors import CORS
 from save_model_and_cluster_info import save_to_csv_and_hash
-from autoencoder_model import Autoencoder
 import os
 from crawl import QueenitCrawling
 from flask import Flask, request, jsonify
@@ -15,26 +14,18 @@ app = Flask(__name__)
 CORS(app)
 @app.route('/crawl', methods=['POST'])
 def crawl():
-    # # # Step 1: 크롤링 작업   
-    # url = 'https://web.queenit.kr/'
-    # path_input = 'c:/queenit/'
+    # # Step 1: 크롤링 작업   
+    url = 'https://web.queenit.kr/'
+    path_input = 'c:/queenit/'
     
-    # repeat = 50    
-    # subfolders = ['top','onepiece','bottom','outer', 'skirt']
+    repeat = 30    
+    subfolders = ['top','onepiece','bottom','outer', 'skirt']
     
-    # for i in subfolders:
-    #      QueenitCrawling.queenit_crawling(url, path_input, i , repeat)
-    
-    # # 크롤링 코드 실행
-    # QueenitCrawling.queenit_crawling(url, path_input, repeat, 'top')
-    # QueenitCrawling.queenit_crawling(url, path_input, repeat, 'onepiece')
-    # QueenitCrawling.queenit_crawling(url, path_input, repeat, 'bottom')
-    # QueenitCrawling.queenit_crawling(url, path_input, repeat, 'outer')
-    # QueenitCrawling.queenit_crawling(url, path_input, repeat, 'skirt')    
-   
+    # for category in subfolders:
+    #      QueenitCrawling.queenit_crawling(url, path_input, category , repeat)  
 
-    # Step 2: 각 폴더별로 반복문 돌면서 각자 처리후 csv에 저장
-    subfolders = ['outer', 'onepiece', 'skirt', 'bottom', 'top']
+
+    # Step 2: 각 폴더별로 반복문 돌면서 각자 처리후 csv에 저장    
     for subfolder in subfolders:
         image_folder = f'C:/queenit/{subfolder}'    
         image_files = [f for f in os.listdir(image_folder) if not f.endswith('.csv')]
@@ -57,7 +48,7 @@ def crawl():
         
         # Step 5: CSV 파일 저장    
         save_to_csv_and_hash(df)    
-    return jsonify({'status': 'success'})
+    return jsonify({'status': '크롤링 및 군집화 완료'})
 
 
 @app.route('/predict', methods=['POST'])

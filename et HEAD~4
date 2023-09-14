@@ -1,0 +1,256 @@
+[33mcommit b9a1a4c657d8b7c49e94b8698fa604842d8c45be[m[33m ([m[1;36mHEAD -> [m[1;32mdata[m[33m)[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 14 22:50:21 2023 +0900
+
+    0914 캐시정리
+    
+    제발 업로드좀 하자
+
+[33mcommit a48e543fe45f5bb354b9df53628facf065a5e3bf[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 14 22:48:18 2023 +0900
+
+    0914 플라스크쪽 완성
+    
+    모델 용량이 커서 깃허브에 안올라가는게 오류였다
+    플라스크랑 모델쪽, 카테고리 나누는것까진 완성했고
+    성능향상도 여기서 끝내도록 한다.
+    하지만 개인적으로 yolov5를 이용해서 더 진행해보고 싶다.
+
+[33mcommit 5a26fcc0ac85d17cbe3a6e763a43ca6d3c8fa270[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 14 22:37:32 2023 +0900
+
+    0914 플라스크 서버쪽 완성
+    
+    yolov5를 사용해보고 싶어서 이것저것 남은기간동안 시도
+
+[33mcommit e08e9ec2566c338d81f99071e282453dd2dba46d[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 14 18:02:30 2023 +0900
+
+    0914 완성
+    
+    yolov5도 도전해보자
+
+[33mcommit 035596f19ab588ac81424e9ccd9f34b3ccd6e9ea[m[33m ([m[1;31morigin/data[m[33m)[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 13 18:03:02 2023 +0900
+
+    0913 모든 자동화 완성
+    
+    더 성능개선이 있으려나 생각
+
+[33mcommit 65115377fd3954a808e727a9a784755bde268b1f[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 13 11:11:21 2023 +0900
+
+    0913 중간저장
+    
+    임의의 이미지 1개에 대해서도 배경제거
+    이제 각 메인클래스별로 비교를 해보자
+
+[33mcommit 6f2b440926314b5b1fac684505c75caa073259f4[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Tue Sep 12 18:03:59 2023 +0900
+
+    0912 app.py 약간수정
+
+[33mcommit 9caf88907b2bdbccabb83cdfbf1f2ec05af1d105[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Tue Sep 12 17:45:57 2023 +0900
+
+    0912 자동크롤링 완성, 배경제거 잠재벡터 이용
+    
+    각각 메인클래스를 나눠서 비교하기
+    이런식으로라도 확률을 올려야한다
+
+[33mcommit db8dbbbb72e3299c31066dbc03eb9c9684339643[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Mon Sep 11 17:10:40 2023 +0900
+
+    0911 yolo 이용해서 데이터 전처리 도전
+    
+    결과값이 너무 좋지않다
+    데이터전처리를 하든, 다른 모델을 써보든 해야한다.
+    이미지 크롤링도 합쳐야한다.
+
+[33mcommit 3e0e1b73a1fe8584ee31c433e8591b600e6b4a7b[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Sun Sep 10 22:59:09 2023 +0900
+
+    0910 집 수정
+
+[33mcommit ff8af7d5e4fab915af2b644a45fa21bf2af840c6[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Sat Sep 9 15:58:42 2023 +0900
+
+    0909 집에서 연습
+
+[33mcommit 1ab1e59bf4f2511dee19851aef25f3c6c0f453f8[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 7 22:43:08 2023 +0900
+
+    이그노어 변경, 리콰이어먼츠 등록
+
+[33mcommit 8676fad91797442cc72eb92928e3a4fd55c51e4f[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 7 17:32:40 2023 +0900
+
+    0907 크롤링 제외 모듈 및 서비스로직 완성
+    
+    가상환경 이용(my9oz)
+    크롤링 작업 제외한 잠재벡터 추출 및 군집화, 모델저장, csv 저장 완료
+    
+    임의의 이미지 1장에 대해 비슷한 이미지들을 넘기는것까지 완료
+    
+    /predict로 이미지를 넘겨받을때
+    mainclass에 대한 정보도 같이 넘겨받음으로서 미리 한번 구분을 하는게 좋을것 같음.
+
+[33mcommit f76d5a7ce545b2a2e679e5e727784c835fb9372f[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Sep 7 00:57:51 2023 +0900
+
+    라벨링도전
+    
+    틀만 만들기
+
+[33mcommit 6ca2d870071b62e574ceb5516b7457f00ac68a81[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 6 19:21:21 2023 +0900
+
+    깃 이그노어 변경
+
+[33mcommit 39f65feb38d5eccf2dd5baa9458e6d6b20be271e[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 6 18:03:08 2023 +0900
+
+    0906 잠재벡터
+    
+    잠재벡터만 이용하면 되니 카테고리별 모델4개 하는방법은 VGG16쓰는 현재로선 적절하지 않다.
+    성능을 올리기 위해선 Yolo등을 이용해 옷만 세그멘테이션을 한뒤 이용하는게 좋을것 같다
+    
+    csv 저장이 잘 안된다. 다시 해볼것.
+    이제 flask에 다 올려야한다
+
+[33mcommit 9d373464a99234d3cc5abdc0bd51dc86d4d2dee8[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 6 14:58:27 2023 +0900
+
+    0906 추가 수정
+
+[33mcommit ca63b4f13fb08e0f48a8a75d41c93467dade95e5[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Sep 6 14:57:53 2023 +0900
+
+    0906 모듈화후, flask에 넣기
+    
+    완성된 모델의 필요없는 코드 제거(t-sne, elbow method등)후
+    프로젝트에 맞는 형태로 모듈화 및 적용시키기 시작
+
+[33mcommit 52dee960302dc26f2a6fd0237b317559d0b206ee[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Tue Sep 5 18:02:17 2023 +0900
+
+    0905 모델몇개 완성
+    
+    잠재벡터 모듈 및 서비스로직 뼈대완성
+    K-fashion도전중
+
+[33mcommit da9b9966ae6281636b99533ad8323c9244a7fb46[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Mon Sep 4 17:54:39 2023 +0900
+
+    오토인코더 만들기(코랩)
+    
+    성능은 차차 높여가고, 애자일 방식으로
+
+[33mcommit 0a6ee70b49a287808d44bc339cd532a03ddf44af[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Mon Sep 4 00:59:23 2023 +0900
+
+    파일정리
+
+[33mcommit b62a720e5eaff74615f11af3a656b3b81ee9b05c[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Mon Sep 4 00:58:56 2023 +0900
+
+    파일정리
+
+[33mcommit 565caa5dd720db6f109651a373e1250b1028fe7d[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Sun Sep 3 21:15:28 2023 +0900
+
+    파일경로 수정
+
+[33mcommit 23b2fa8472060cad846ab774d663863a6f2b4541[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Sun Sep 3 21:09:20 2023 +0900
+
+    0903 크롤링 및 군집화 뼈대구성
+    
+    퀸잇 이미지 모듈에 쓸 코드 뼈대구성.
+    서비스 로직에 들어갈 코드 다음에 할차례
+
+[33mcommit 94c35ffbae6d1df25ff2a02ca3e90eecb540cc73[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Thu Aug 31 14:56:30 2023 +0900
+
+    플라스크 백엔드 연결
+    
+    파이프라인, 뼈대만 잡기 일단 성공
+    프론트에서 백엔드로, 백엔드에서 플라크로
+    이미지가 전송되게 하고
+    모델을 통해서 결과값이 json으로 나왔다는 가정하에 리턴으로 임의의 json값을 줬고
+    이 값이 백엔드에도 뜨는데 성공,
+    프론트에 뜨는데도 성공
+
+[33mcommit 11e90c8e5c88d6e34e953b28f54ca444245a370b[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Aug 30 17:59:42 2023 +0900
+
+    플라스크 서버 간단하게 만들기
+    
+    군집변경후 다시 실행코드
+
+[33mcommit 383f5dbbcbc8899fdd72c4108ea29da0f3a2770d[m
+Merge: ca2d23a 6bd6850
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Aug 30 11:10:58 2023 +0900
+
+    Merge branch 'data' of https://github.com/MyStraw/9oz-project into data
+
+[33mcommit ca2d23ac14d69021862123758e71fd1b3c2bd4e3[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Aug 30 11:10:18 2023 +0900
+
+    플라스크 변형시키기
+    
+    모델을 포함해서 돌아가야한다
+
+[33mcommit 6bd68505e626bb830a333c84df6e9b4621e6667e[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Wed Aug 30 11:10:18 2023 +0900
+
+    플라스크 변형시키기
+    
+    모델을 포함해서 돌아가야한다
+
+[33mcommit 3fa303faab70f98763d597e0bbd99eca22d9681a[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Tue Aug 29 18:00:05 2023 +0900
+
+    플라스크 뼈대만 만들기
+    
+    플라스크 설정 해야함
+    뼈대만 만들고 살 붙이기
+
+[33mcommit bebc3321eeb37a3a5405964884fcc58d8684c356[m
+Author: MyStraw <kikongdosa@gmail.com>
+Date:   Tue Aug 29 16:37:36 2023 +0900
+
+    인코더 부분 튜닝연습 필요
+    
+    군집수를 같게하지 말고 다르게 할것
+    인코더부분 미세조정 필요
+    잠재벡터를 평가할수 있는

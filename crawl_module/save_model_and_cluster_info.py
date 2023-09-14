@@ -13,8 +13,13 @@ def save_to_csv_and_hash(df, csv_path='latent_vectors_with_all_info.csv'):
     # 기존 DataFrame과 새로운 DataFrame을 결합
     combined_df = pd.concat([existing_df, df], ignore_index=True)
     
+     # 중복된 행 제거
+    unique_df = combined_df.drop_duplicates(subset=['image_path', 'latent_vector', 'cluster_label', 'cluster_center_distance', 'mainclass'])
+    
     # 다시 CSV 파일로 저장
-    combined_df.to_csv(csv_path, index=False, encoding='cp949')
+    # combined_df.to_csv(csv_path, index=False, encoding='cp949')
+    unique_df.to_csv(csv_path, index=False, encoding='cp949')
+    
     
     # 해시 테이블로 데이터 로딩
     hash_table = {}

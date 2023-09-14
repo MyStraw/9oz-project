@@ -13,7 +13,7 @@ def perform_clustering(latent_vectors, image_files, mainclass):
         latent_vectors = latent_vectors.reshape(-1, 1)
     
     # K-means 군집화
-    n_clusters = 10  # 군집의 수
+    n_clusters = 15  # 군집의 수
     kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(latent_vectors)
     
     # 각 데이터 포인트의 군집 중심까지의 거리 계산

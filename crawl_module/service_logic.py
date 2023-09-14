@@ -80,15 +80,26 @@ def predict_similar_items(base64_image, mainclass_value, semiclass_value):
     
     # 군집 내 랭킹 생성
     same_cluster_items = filtered_df[filtered_df['cluster_label'] == closest_cluster_label]
-    ranked_items = same_cluster_items.sort_values(by='cluster_center_distance')  
+    #ranked_items = same_cluster_items.sort_values(by='cluster_center_distance')  
 
     
     # # 유사도 기반 랭킹
     # all_distances = pairwise_distances(latent_vector, np.stack(filtered_df['latent_vector'].to_numpy()))
     # ranked_items_by_distance = filtered_df.loc[np.argsort(all_distances.flatten())]
     
-    # cluster_center_distance 값이 1 미만인 이미지만 선택
-    filtered_items = ranked_items[ranked_items['cluster_center_distance'] < 1]
+    # 수정된 부분: 군집 내에서의 상대적 가까움을 기준으로 랭킹 매기기
+    same_cluster_items['relative_distance'] = pairwise_distances(
+        latent_vector, np.stack(same_cluster_items['latent_vector'].to_numpy())
+    ).flatten()
+    ranked_items = same_cluster_items.sort_values(by='relative_distance')  
     
-    # 결과 반환 (이미지 경로 목록, 10개 이내)
+   
+    
+    # 결과 반환 (이미지 경로 목록, 5개 이내)
+    return ranked_items['image_path'].tolist()[:5]
+    
+    # cluster_center_distance 값이 1 미만인 이미지만 선택
+    filtered_items = ranked_items[ranked_items['cluster_center_distance'] < 1.5]
+    
+    # 결과 반환 (이미지 경로 목록, 5개 이내)
     return filtered_items['image_path'].tolist()[:5]    

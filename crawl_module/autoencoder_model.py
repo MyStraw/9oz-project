@@ -11,12 +11,19 @@ import io
 from PIL import Image
 from rembg import remove
 from datetime import datetime
+from tensorflow.keras.applications import ResNet50
 
 def convert_blob_to_png(blob_path, png_path):
     with open(blob_path, 'rb') as f:
         blob_data = f.read()
     image = Image.open(io.BytesIO(blob_data))
     image.save(png_path)
+    
+    
+def convert_gif_to_png(gif_path, png_path):
+    image = Image.open(gif_path)
+    image = image.convert('RGBA')  # 애니메이션 GIF의 첫 프레임만 가져옵니다.
+    image.save(png_path)    
 
 class Autoencoder:
     def __init__(self, image_dir='C:/queenit/'):
@@ -25,15 +32,24 @@ class Autoencoder:
         self.encoder_model = None  # 잠재 벡터를 추출하기 위한 인코더 모델
 
     def build_model(self):
-        # VGG16 모델 불러오기
-        vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
-        vgg16.trainable = False  # Freeze the VGG16 layers
+        # # VGG16 모델 불러오기
+        # vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
+        # vgg16.trainable = False  # Freeze the VGG16 layers
+        
+        # ResNet50 모델 불러오기
+        resnet50 = ResNet50(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
+        resnet50.trainable = False  # Freeze the ResNet50 layers
+        
+        
+        
 
         # 오토인코더 모델 초기화
         self.autoencoder_model = Sequential()
 
-        # 인코더 부분 (VGG16)
-        self.autoencoder_model.add(vgg16)
+        # # 인코더 부분 (VGG16)
+        # self.autoencoder_model.add(vgg16)
+        # 인코더 부분 (ResNet50)
+        self.autoencoder_model.add(resnet50)
 
         # Flatten과 Dense (잠재벡터)
         self.autoencoder_model.add(Flatten())
@@ -114,11 +130,15 @@ class Autoencoder:
         for idx, f in enumerate(image_files):
             full_image_path = os.path.join(self.image_dir, subfolder, f) 
             print(f"Processing file {idx + 1} of {total_files}") 
+            
             if f.endswith('.blob'):
                 png_path = f"{f[:-5]}.png"  # .blob 확장자 제거 후 .png 추가
                 convert_blob_to_png(full_image_path, os.path.join(self.image_dir,subfolder, png_path))
                 f = png_path  # 이제 f는 .png 파일을 가리킵니다.
-                
+            if f.endswith('.gif'):
+                png_path = f"{f[:-4]}.png"  # .gif 확장자 제거 후 .png 추가
+                convert_gif_to_png(full_image_path, os.path.join(self.image_dir, subfolder, png_path))
+                f = png_path     
             
             img = load_and_process_single_image(full_image_path)
             # if img is not None:
