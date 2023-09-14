@@ -10,7 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.oz.config.auth.JWTAuthorizationFilter;
+import com.example.oz.config.auth.JWTAuthorizationFilter;
 import com.example.oz.config.filter.JWTAuthenticationFilter;
+import com.example.oz.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	
 	private final AuthenticationConfiguration authConfig;
+	private final MemberRepository memberRepo;
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -30,14 +35,13 @@ public class SecurityConfig {
 		http.csrf(csrf->csrf.disable());
 		http.cors(cors->cors.disable());
 		http.authorizeHttpRequests(security->{
-			security.requestMatchers("/member/**").authenticated()
-			.requestMatchers("/manager/**").hasAnyRole("manager","admin")
-			.requestMatchers("/admin/**").hasRole("admin")
+			security.requestMatchers("/crawl/**").hasRole("admin")
 			.anyRequest().permitAll();
 		});
 		http.formLogin(frmLogin->frmLogin.disable());
 		http.sessionManagement(ssmg->ssmg.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilter(new JWTAuthenticationFilter(authConfig.getAuthenticationManager()));
+		http.addFilter(new JWTAuthorizationFilter(authConfig.getAuthenticationManager(), memberRepo));
 		return http.build();
 	}
 }

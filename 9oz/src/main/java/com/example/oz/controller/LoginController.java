@@ -16,11 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
 	private final MemberService memberService;
-	
-	@GetMapping("/login")
-    public String login() {
-        return "login";
-    }
+
 
     @GetMapping("/register")
     public String registerForm() {

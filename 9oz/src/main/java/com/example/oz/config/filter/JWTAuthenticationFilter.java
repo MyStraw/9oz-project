@@ -3,6 +3,7 @@ package com.example.oz.config.filter;
 import java.io.IOException;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
+	
 	
 	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse resp) throws AuthenticationException{
 		ObjectMapper om = new ObjectMapper();
@@ -51,8 +52,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		
 		String jwtToken = JWT.create()
 							.withClaim("username", user.getUsername())
-							.withExpiresAt(new Date(System.currentTimeMillis()+1000*60*10))
-							.sign(Algorithm.HMAC256("9oz.jwtkey"));
+							.withExpiresAt(new Date(System.currentTimeMillis()+1000*60*30))
+							.sign(Algorithm.HMAC256("com.example.oz"));
 		resp.addHeader("Authorization", " Bearer " + jwtToken);
 		chain.doFilter(req,resp);
 	}
