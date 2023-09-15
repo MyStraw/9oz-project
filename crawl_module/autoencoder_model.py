@@ -32,13 +32,13 @@ class Autoencoder:
         self.encoder_model = None  # 잠재 벡터를 추출하기 위한 인코더 모델
 
     def build_model(self):
-        # # VGG16 모델 불러오기
-        # vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
-        # vgg16.trainable = False  # Freeze the VGG16 layers
+        # VGG16 모델 불러오기
+        vgg16 = VGG16(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
+        vgg16.trainable = False  # Freeze the VGG16 layers
         
-        # ResNet50 모델 불러오기
-        resnet50 = ResNet50(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
-        resnet50.trainable = False  # Freeze the ResNet50 layers
+        # # ResNet50 모델 불러오기
+        # resnet50 = ResNet50(weights='imagenet', include_top=False, input_shape=(416, 416, 3))
+        # resnet50.trainable = False  # Freeze the ResNet50 layers
         
         
         
@@ -46,10 +46,10 @@ class Autoencoder:
         # 오토인코더 모델 초기화
         self.autoencoder_model = Sequential()
 
-        # # 인코더 부분 (VGG16)
-        # self.autoencoder_model.add(vgg16)
+        # 인코더 부분 (VGG16)
+        self.autoencoder_model.add(vgg16)
         # 인코더 부분 (ResNet50)
-        self.autoencoder_model.add(resnet50)
+        # self.autoencoder_model.add(resnet50)
 
         # Flatten과 Dense (잠재벡터)
         self.autoencoder_model.add(Flatten())

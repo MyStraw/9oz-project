@@ -18,11 +18,11 @@ def crawl():
     url = 'https://web.queenit.kr/'
     path_input = 'c:/queenit/'
     
-    repeat = 30    
+    repeat = 200
     subfolders = ['top','onepiece','bottom','outer', 'skirt']
     
-    # for category in subfolders:
-    #      QueenitCrawling.queenit_crawling(url, path_input, category , repeat)  
+    for category in subfolders:
+        QueenitCrawling.queenit_crawling(url, path_input, category , repeat)  
 
 
     # Step 2: 각 폴더별로 반복문 돌면서 각자 처리후 csv에 저장    
@@ -48,7 +48,7 @@ def crawl():
         
         # Step 5: CSV 파일 저장    
         save_to_csv_and_hash(df)    
-    return jsonify({'status': '크롤링 및 군집화 완료'})
+    return jsonify({'status': '완료'})
 
 
 @app.route('/predict', methods=['POST'])
