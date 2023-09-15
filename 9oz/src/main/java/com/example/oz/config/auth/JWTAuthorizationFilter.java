@@ -28,6 +28,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		super(authenticationManager);
 		this.memberRepo = memberRepo;
 	}
+	
 	@Override
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException, ServletException{
 		String srcToken = req.getHeader("Authorization");

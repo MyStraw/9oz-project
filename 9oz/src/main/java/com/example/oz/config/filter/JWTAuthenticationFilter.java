@@ -55,7 +55,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 							.withExpiresAt(new Date(System.currentTimeMillis()+1000*60*30))
 							.sign(Algorithm.HMAC256("com.example.oz"));
 		resp.addHeader("Authorization", " Bearer " + jwtToken);
-		chain.doFilter(req,resp);
+		resp.setContentType("application/json");
+		resp.setCharacterEncoding("UTF-8");
+		resp.getWriter().write("{\"message\":\"로그인 성공\"}");
+		resp.getWriter().flush();
+		resp.getWriter().close();
+//		chain.doFilter(req,resp);
 	}
 	
 }

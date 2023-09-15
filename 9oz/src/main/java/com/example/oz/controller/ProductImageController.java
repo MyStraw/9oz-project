@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -53,7 +57,7 @@ class ProductSearchOption {
 public class ProductImageController {
 	
 	private final ProductImageRepository productImageRepo;
-	
+	private final RestTemplate restTemplate = new RestTemplate();
 	
 	@GetMapping("/product/list")
 	public List<ProductImage> getProductImages(ProductSearchOption pso){
@@ -134,6 +138,21 @@ public class ProductImageController {
         }
         
         return results;
+    }
+    
+    @PostMapping("/crawl")
+    public ResponseEntity<String> crawling() {
+        try {
+            String crawlURL = "http://10.125.121.185:5000/crawl";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
+            HttpEntity<String> entity = new HttpEntity<>(null, headers);
+            ResponseEntity<String> resp = restTemplate.exchange(crawlURL, HttpMethod.POST, entity, String.class);
+            return ResponseEntity.ok(resp.getBody());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
     }
     
     @PostMapping("/predict")
