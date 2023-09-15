@@ -66,12 +66,13 @@ const ItemInfo = (props) => {
                         onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
                         className={Styles.nineozimg}
                     />
-                    <p>상품명: {productDetails.productName}</p>
-                    <p>상품코드: {productDetails.productCode}</p>
-                    <p>판매가격: {productDetails.salePrice}원</p>
+                    <div className={Styles.product_info}>
+                        <p className={Styles.prdname}>상품명: {productDetails.productName}</p>
+                        <p>상품코드: {productDetails.productCode}</p>
+                        <p>판매가격: {productDetails.salePrice}원</p>
 
-                    <Link to="/"><Button>뒤로 가기</Button></Link>
-
+                        <Link to="/"><Button>뒤로 가기</Button></Link>
+                    </div>
                     <div className={Styles.recommandImg}>
                         {similarItemUrls.length > 0 ? (
                             similarItemUrls.map((url, index) => {
@@ -89,7 +90,7 @@ const ItemInfo = (props) => {
                         ) : (
                             <>
                                 <Box sx={{ display: 'flex' }}>
-                                    <p>상품 정보 불러오는 중...</p>
+                                    <p>추천 상품 정보 불러오는 중...</p>
                                     <CircularProgress />
                                 </Box>
                             </>

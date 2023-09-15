@@ -4,7 +4,8 @@ import axios from 'axios';
 
 const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, subCategory, selectedSubCategory, onProductSelect }) => {
   const [data, setData] = useState([]);
-  const [showChart, setShowChart] = useState(false); // 데이터가 있는 경우에만 차트를 표시
+  const [showChart, setShowChart] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   function randomColor() {
     const letters = '0123456789ABCDEF';
@@ -67,6 +68,33 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
       });
   }, [selectedSortValue, selectedSortColumn, selectedCategory, subCategory]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const initialDataURL = `http://10.125.121.170:8080/product/list?sort=desc&sortcolumn=totalsale`;
+        const response = await axios.get(initialDataURL);
+
+        const sortedData = response.data.sort((a, b) => b.totalsale - a.totalsale);
+        const topTenData = sortedData.slice(0, 10);
+
+        // 카테고리별 랜덤 색상 생성 및 추가
+        const coloredData = topTenData.map((item) => ({
+          ...item,
+          color: randomColor(),
+        }));
+
+        setData(coloredData);
+        setIsLoading(false); // 데이터 로딩 완료 상태로 설정
+        setShowChart(true);
+      } catch (error) {
+        console.error('데이터 가져오기 오류:', error);
+        setIsLoading(false); // 데이터 로딩 오류 상태로 설정
+      }
+    };
+
+    fetchData(); // 데이터 가져오는 함수 호출
+  }, []);
+
 
   const chartOptions = {
     series: [
@@ -109,8 +137,23 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
           },
         },
       },
+      // 애니메이션 설정
+      animations: {
+        enabled: true, // 애니메이션 활성화
+        easing: 'easeinout', // 애니메이션 이징 함수 (예: 'linear', 'easein', 'easeout', 'easeinout')
+        speed: 800, // 애니메이션 속도 (밀리초 단위)
+        animateGradually: {
+          enabled: true,
+          delay: 150, // 항목들 간의 애니메이션 시작 지연 (밀리초 단위)
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 350, // 다이나믹 애니메이션 속도 (밀리초 단위)
+        },
+      },
     },
   };
+
 
 
 
@@ -132,8 +175,12 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
   return (
     <>
       <div>
-        {showChart && (
+        {isLoading ? (
+          <p>로딩중</p>
+        ) : showChart ? (
           <ReactApexChart options={chartOptions.options} series={chartOptions.series} type="bar" height={350} events={{ dataPointSelection: handleBarClick }} />
+        ) : (
+          <p>카테고리를 선택해주세요.</p>
         )}
         <p style={{ color: textColor }}></p>
       </div>
