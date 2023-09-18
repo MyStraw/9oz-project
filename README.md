@@ -10,7 +10,8 @@ Backend 개발자로서 9oz-project 일지
 + 0906 이미지 파일이 로컬에 저장되어 있고 경로가지고 주고 받고 하다보니 프론트 페이지 로딩때 이미지 로딩때문에 스프링에 부하가 많이 걸림 -> 속도가 느려짐: 이를 해결하기 위해 이미지 파일을 스프링에 resource/static 에 images 폴더를 만들어 놓고 거기다가 이미지를 다 복사해둠 -> 프론트에서 이미지를 불러올 때 스프링에 요청하는것이 아니라 스태틱에 있는 url을 가져감으로써 톰캣서버 전단에서 처리하게 되고 스프링에 대한 부하가 줄어듬 -> 로딩시간 빨리짐(해결)
 또한 DB에 테이블내에 ID컬럼이 있는데 스프링서버를 가동하면 컬럼에 동일한 ID컬럼이 생기고 안에 값은 0으로 저장되어있음 -> id 컬럼이 두개가 생기니 프론트에 중복으로 읽히는 버그 발생 -> 지우고 바꿔보고 해봤으나 계속해서 id컬럼이 바뀐 이름따라 생성됨 -> 테이블을 지우고 스프링으로 테이블을 만듬 -> 그 이후 table data import해서 값을 집어 넣음-> 이렇게 하니 스프링서버를 실행시켜도 컬럼이 복사되지않음
 
-+ 0907 /predict 요청시 Flask 서버로 이미지 + mainclass,semiclass 정보 같이 보내주기 -> 기존코드에서 
++ 0907 /predict 요청시 Flask 서버로 이미지 + mainclass,semiclass 정보 같이 보내주기 -> 기존코드에서
+   
 	String mainclass = payload.get("mainclass"); 추가
 	String semiclass = payload.get("semiclass");
 
@@ -20,6 +21,7 @@ Backend 개발자로서 9oz-project 일지
 	dataMap.put("semiclass", semiclass);
 
 	.bodyValue(dataMap) 밸류를 데이터맵으로 넣기
+  
 	이렇게 넣어서 받아옴 -> 처음에 None 값으로 계속 들어오길래 오류인줄 알았는데 프론트에서 값을 잘못보낸거였음(해결)
 	또 이미지 클릭했을때 이미지의 상세페이지 정보들 불러오는 컨트롤러 설정(product/list/{product_code}로 받아옴)(이미지 클릭시 상품 코드를 찾아서 그에 맞는 상세정보 불러오기)
 
@@ -29,7 +31,7 @@ Backend 개발자로서 9oz-project 일지
   	2.설정 후 test로 db에 member데이터 넣으려는데 junit이 실행이 안됨(정확히는 실행이 되는데 실행이 된 흔적이 없고, db에 저장이 안됨)
   	3.junit이 계속 안되었기에 이를 우회하기 위해
   
-  		@PostConstruct
+  	@PostConstruct
 	public void init() {
 		memberRepo.save(Member.builder().username("member").enabled(true).password(encoder.encode("abcd"))
 				.role("ROLE_MEMBER").build());
@@ -39,7 +41,8 @@ Backend 개발자로서 9oz-project 일지
 				.role("ROLE_ADMIN").build());
 	
 	}
-	이 부분을 Application에 넣어두고 처음 실행될때 동작하도록 설정함
+
+ 	이 부분을 Application에 넣어두고 처음 실행될때 동작하도록 설정함
 	4. 이렇게 하니 member,manager,admin 데이터가 db에 저장되었고 이후 코드부분 주석처리함
   	5. 이후 들어간 데이터와 권한들을 통해 인가 설정(crawl 버튼 기능때문에 권한별 인가 필요)
 
