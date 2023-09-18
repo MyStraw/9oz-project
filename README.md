@@ -21,10 +21,10 @@ Backend 개발자로서 9oz-project 일지
 
 	.bodyValue(dataMap) 밸류를 데이터맵으로 넣기
 	이렇게 넣어서 받아옴 -> 처음에 None 값으로 계속 들어오길래 오류인줄 알았는데 프론트에서 값을 잘못보낸거였음(해결)
-	또 이미지 클릭했을때 이미지의 상세페이지 정보들 불러오는 컨트롤러 설정(product/list/{product_code}로 받아옴)(이미지 클릭시 	상품 코드를 찾아서 그에 맞는 상세정보 불러오기)
+	또 이미지 클릭했을때 이미지의 상세페이지 정보들 불러오는 컨트롤러 설정(product/list/{product_code}로 받아옴)(이미지 클릭시 상품 코드를 찾아서 그에 맞는 상세정보 불러오기)
 + 0908 ~ 0914 JWT를 이용해서 로그인 구현
-	1.SecurityConfig, JWTAuthorizationFilter, JWTAuthenticationFilter, Member, MemberRepository, MemberService, 		MemberServiceImpl, SecurityUserDetailsService 설정
-  	2.설정 후 test로 db에 member데이터 넣으려는데 junit이 실행이 안됨(정확히는 실행이 되는데 실행이 된 흔적이 없고, db에 저장이 	안됨)
+	1.SecurityConfig, JWTAuthorizationFilter, JWTAuthenticationFilter, Member, MemberRepository, MemberService, MemberServiceImpl, SecurityUserDetailsService 설정
+  	2.설정 후 test로 db에 member데이터 넣으려는데 junit이 실행이 안됨(정확히는 실행이 되는데 실행이 된 흔적이 없고, db에 저장이 안됨)
   	3.junit이 계속 안되었기에 이를 우회하기 위해
   		@PostConstruct
 	public void init() {
@@ -40,7 +40,8 @@ Backend 개발자로서 9oz-project 일지
 	4. 이렇게 하니 member,manager,admin 데이터가 db에 저장되었고 이후 코드부분 주석처리함
   	5. 이후 들어간 데이터와 권한들을 통해 인가 설정(crawl 버튼 기능때문에 권한별 인가 필요)
 
-+ 0915 crawl버튼 활성화 시키기(crawl 버튼은 admin계정만 실행 가능, 실행 시 flask 서버에서 모델링에 필요한 data를 crawling 하고 	modeling까지 하는 기능)
++ 0915 crawl버튼 활성화 시키기(crawl 버튼은 admin계정만 실행 가능, 실행 시 flask 서버에서 모델링에 필요한 data를 crawling 하고 modeling까지 하는 기능)
+  
 	@PostMapping("/crawl")
     public ResponseEntity<String> crawling() {
         try {
