@@ -85,16 +85,17 @@ function App() {
             {isLoggedIn ? (
               <>
                 <CrawlButton />
-                <Button onClick={handleLogout} style={{ border: '1px solid #000', color: 'black' }}>Logout</Button>
+                <Button onClick={handleLogout} style={{ margin: '0 10px', border: '1px solid #000', color: 'black' }}>Logout</Button>
               </>
             ) : (
               <>
                 <Link to="/login">
-                  <Button style={{ border: '1px solid #000', color: 'black' }}>Login</Button>
+                  <Button style={{ margin: '0 10px', border: '1px solid #000', color: 'black' }}>Login</Button>
                 </Link>
               </>
             )}
           </div>
+
 
           <div className="app-container">
             <Routes>
