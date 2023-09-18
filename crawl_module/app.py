@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 @app.route('/crawl', methods=['POST'])
 def crawl():
-    # # Step 1: 크롤링 작업   
+    # Step 1: 크롤링 작업   
     url = 'https://web.queenit.kr/'
     path_input = 'c:/queenit/'
     
