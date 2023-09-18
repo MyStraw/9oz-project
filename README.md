@@ -22,10 +22,13 @@ Backend 개발자로서 9oz-project 일지
 	.bodyValue(dataMap) 밸류를 데이터맵으로 넣기
 	이렇게 넣어서 받아옴 -> 처음에 None 값으로 계속 들어오길래 오류인줄 알았는데 프론트에서 값을 잘못보낸거였음(해결)
 	또 이미지 클릭했을때 이미지의 상세페이지 정보들 불러오는 컨트롤러 설정(product/list/{product_code}로 받아옴)(이미지 클릭시 상품 코드를 찾아서 그에 맞는 상세정보 불러오기)
+
 + 0908 ~ 0914 JWT를 이용해서 로그인 구현
+  
 	1.SecurityConfig, JWTAuthorizationFilter, JWTAuthenticationFilter, Member, MemberRepository, MemberService, MemberServiceImpl, SecurityUserDetailsService 설정
   	2.설정 후 test로 db에 member데이터 넣으려는데 junit이 실행이 안됨(정확히는 실행이 되는데 실행이 된 흔적이 없고, db에 저장이 안됨)
   	3.junit이 계속 안되었기에 이를 우회하기 위해
+  
   		@PostConstruct
 	public void init() {
 		memberRepo.save(Member.builder().username("member").enabled(true).password(encoder.encode("abcd"))
@@ -56,6 +59,7 @@ Backend 개발자로서 9oz-project 일지
             return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
         }
     }
+
   1. 먼저 flask서버와 연결하고 HttpHeaders 객체를 생성 후 헤더와 본문을 설정(이 경우 헤더는 null)
   2. restTemplete를 사용해 flask 서버에 post 요청을 보냄(응답은 resp에 저장)
   3. flask 서버로 부터 받은 응답의 본문을 프론트로 반환
