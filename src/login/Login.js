@@ -44,7 +44,7 @@ const Login = ({ setIsLoggedIn }) => {
     };
 
 
-    const response = await axios.post('http://10.125.121.170:8080/login', loginData, {
+    const response = await axios.post('http://localhost:8080/login', loginData, {
       headers: {
         'Content-Type': 'application/json',
       },
