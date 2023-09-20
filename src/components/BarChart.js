@@ -42,7 +42,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
 
 
   useEffect(() => {
-    const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
+    const dataURL = `http://localhost:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
     axios
       .get(dataURL)
       .then((response) => {
@@ -71,7 +71,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const initialDataURL = `http://10.125.121.170:8080/product/list?sort=desc&sortcolumn=totalsale`;
+        const initialDataURL = `http://localhost:8080/product/list?sort=desc&sortcolumn=totalsale`;
         const response = await axios.get(initialDataURL);
 
         const sortedData = response.data.sort((a, b) => b.totalsale - a.totalsale);

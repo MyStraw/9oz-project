@@ -20,7 +20,7 @@ const CrawlButton = () => {
             }
         };
 
-        axios.post("http://10.125.121.170:8080/crawl", null, config)
+        axios.post("http://localhost:8080/crawl", null, config)
             .then(response => {
                 setIsLoading(false);
                 setIsCompleted(true);

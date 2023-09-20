@@ -74,7 +74,7 @@ const TableSelection = ({ selectedProduct }) => {
         setIsDataLoaded(false);
 
         // 여기서 dataURL 생성 시, 파라미터 순서를 올바르게 조정
-        const dataURL = `http://10.125.121.170:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
+        const dataURL = `http://localhost:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
 
         if (selectedSortValue !== 'none' && selectedSortColumn !== 'none' && selectedCategory && subCategory) {
             setIsLoading(true);
@@ -101,7 +101,7 @@ const TableSelection = ({ selectedProduct }) => {
             return;
         }
 
-        const searchUrl = `http://10.125.121.170:8080/search?query=${encodeURIComponent(searchQuery)}`;
+        const searchUrl = `http://localhost:8080/search?query=${encodeURIComponent(searchQuery)}`;
 
         axios.get(searchUrl)
             .then(response => {
@@ -128,7 +128,7 @@ const TableSelection = ({ selectedProduct }) => {
     }, [searchQuery]);
 
     useEffect(() => {
-        const initialDataURL = `http://10.125.121.170:8080/product/list?sort=desc&sortcolumn=totalsale`;
+        const initialDataURL = `http://localhost:8080/product/list?sort=desc&sortcolumn=totalsale`;
 
         axios.get(initialDataURL)
             .then(response => response.data)
@@ -234,7 +234,7 @@ const TableSelection = ({ selectedProduct }) => {
             <div key={item.id} className={Styles.imageGroupItem}>
                 <Link to={`/item_info?infoProductCode=${item.productCode}`} onClick={handleImageClick}>
                     <img
-                        src={`http://10.125.121.170:8080/images/${item.imagePath}`}
+                        src={`http://localhost:8080/images/${item.imagePath}`}
                         alt='나인오즈 이미지'
                         onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
                         className={Styles.nineozimg}

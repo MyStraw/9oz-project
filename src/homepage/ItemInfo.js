@@ -42,7 +42,7 @@ const ItemInfo = (props) => {
             semiclass: semiClass
         };
 
-        axios.post('http://10.125.121.170:8080/predict', requestData, {
+        axios.post('http://localhost:8080/predict', requestData, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -61,7 +61,7 @@ const ItemInfo = (props) => {
             {productDetails ? (
                 <>
                     <img
-                        src={`http://10.125.121.170:8080/images/${productDetails.imagePath}`}
+                        src={`http://localhost:8080/images/${productDetails.imagePath}`}
                         alt='나인오즈 이미지'
                         onError={(e) => { e.target.src = process.env.PUBLIC_URL + '/none.png'; }}
                         className={Styles.nineozimg}
