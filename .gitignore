@@ -11,3 +11,4 @@ yolov5/
 hojin_yolo/
 crawl_module/yolov3.weights
 crawl_module/encoder_model.h5
+crawl_module/background_removed_images/background_removed.png
