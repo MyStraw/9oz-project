@@ -21,8 +21,8 @@ def crawl():
     repeat = 200
     subfolders = ['top','onepiece','bottom','outer', 'skirt']
     
-    for category in subfolders:
-        QueenitCrawling.queenit_crawling(url, path_input, category , repeat)  
+    # for category in subfolders:
+    #     QueenitCrawling.queenit_crawling(url, path_input, category , repeat)  
 
 
     # Step 2: 각 폴더별로 반복문 돌면서 각자 처리후 csv에 저장    

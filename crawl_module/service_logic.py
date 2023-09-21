@@ -114,6 +114,7 @@ def predict_similar_items(base64_image, mainclass_value, semiclass_value):
     # filtered_items = ranked_items[ranked_items['relative_distance'] < 1]
     
     # 결과 반환 (이미지 경로 목록, 5개 이내)
+    #return ranked_items['image_path'].tolist()[4:9]
     return ranked_items['image_path'].tolist()[4:9]
     
     # # cluster_center_distance 값이 1 미만인 이미지만 선택
