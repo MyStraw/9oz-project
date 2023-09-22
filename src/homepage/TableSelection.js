@@ -33,7 +33,7 @@ const TableSelection = ({ selectedProduct }) => {
     // 모바일 화면 여부에 따라 버튼 스타일 설정
     const buttonStyle = isMobile
         ? { m: 1, width: '140px', height: '50px', fontSize: '10px', color: 'black' }
-        : { m: 1, width: '200px', height: '50px', fontSize: '15px', color: 'black' };
+        : { m: 1, width: '200px', height: '50px', fontSize: '18px', color: 'black' };
 
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedSubCategory, setSelectedSubCategory] = useState(null);

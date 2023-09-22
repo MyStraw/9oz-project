@@ -16,7 +16,7 @@ const ItemInfo = (props) => {
 
     useEffect(() => {
         const fetchProductDetails = async () => {
-            const productcodeURL = `http://10.125.121.170:8080/product/list/${itemProductCode}`;
+            const productcodeURL = `http://localhost:8080/product/list/${itemProductCode}`;
 
             try {
                 const response = await axios.get(productcodeURL);
@@ -32,7 +32,9 @@ const ItemInfo = (props) => {
     }, [itemProductCode]);
 
     const postSimilarImage = (item) => {
+        // C:\\Users\\user\\Desktop\\9oz\\src\\main\\resources\\static\\images
         const baseImagePath = "C:\\9ozproject\\9OZ_SALES\\";
+        // const baseImagePath = "C:\\Users\\user\\Desktop\\9oz\\src\\main\\resources\\static\\images";
         const fullPath = baseImagePath + item.imagePath;
         const mainClass = item.mainclass;
         const semiClass = item.semiclass;
@@ -42,7 +44,7 @@ const ItemInfo = (props) => {
             semiclass: semiClass
         };
 
-        axios.post('http://localhost:8080/predict', requestData, {
+        axios.post('http://10.125.121.170:8080/predict', requestData, {
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -49,7 +49,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
         const sortedData = response.data.sort((a, b) => b.totalsale - a.totalsale);
         const topTenData = sortedData.slice(0, 10);
 
-        // 카테고리별 랜덤 색상 생성 및 추가
+        /* 카테고리별 랜덤 색상 생성 및 추가 **/
         const coloredData = topTenData.map((item) => ({
           ...item,
           color: randomColor(),
@@ -71,7 +71,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const initialDataURL = `http://localhost:8080/product/list?sort=desc&sortcolumn=totalsale`;
+        const initialDataURL = `http://localhost:8080/product/list?sort=${selectedSortValue}&sortcolumn=${selectedSortColumn}&mainclass=${selectedCategory}&semiclass=${subCategory}`;
         const response = await axios.get(initialDataURL);
 
         const sortedData = response.data.sort((a, b) => b.totalsale - a.totalsale);
@@ -84,15 +84,15 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
         }));
 
         setData(coloredData);
-        setIsLoading(false); // 데이터 로딩 완료 상태로 설정
+        setIsLoading(false);
         setShowChart(true);
       } catch (error) {
         console.error('데이터 가져오기 오류:', error);
-        setIsLoading(false); // 데이터 로딩 오류 상태로 설정
+        setIsLoading(false);
       }
     };
 
-    fetchData(); // 데이터 가져오는 함수 호출
+    fetchData();
   }, []);
 
 
@@ -123,36 +123,46 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
         labels: {
           style: {
             colors: '#000',
+            fontSize: '18px',
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: '#000',
+            fontSize: '15px'
           },
         },
       },
       colors: data.map((item) => item.color),
-      // 막대 바 위에 정보 표시
       tooltip: {
-        enabled: true, // tooltip 활성화
+        enabled: true,
         y: {
           formatter: function (val) {
-            // tooltip으로 표시할 내용 설정
-            return val + ' 판매량'; // 원하는 정보로 수정
+            return val + ' 판매량';
           },
         },
       },
-      // 애니메이션 설정
       animations: {
-        enabled: true, // 애니메이션 활성화
-        easing: 'easeinout', // 애니메이션 이징 함수 (예: 'linear', 'easein', 'easeout', 'easeinout')
-        speed: 800, // 애니메이션 속도 (밀리초 단위)
+        enabled: true,
+        easing: 'easeinout',
+        speed: 800,
         animateGradually: {
           enabled: true,
-          delay: 150, // 항목들 간의 애니메이션 시작 지연 (밀리초 단위)
+          delay: 150,
         },
         dynamicAnimation: {
           enabled: true,
-          speed: 350, // 다이나믹 애니메이션 속도 (밀리초 단위)
+          speed: 350,
         },
       },
     },
   };
+
+
+
+
 
 
 
@@ -168,7 +178,7 @@ const BarChart = ({ selectedSortValue, selectedSortColumn, selectedCategory, sub
 
   const handleBarClick = (event, chartContext, config) => {
     const selectedProductName = chartOptions.options.xaxis.categories[config.dataPointIndex];
-    onProductSelect(selectedProductName); // 선택한 제품 이름을 상위 컴포넌트로 전달
+    onProductSelect(selectedProductName);
   };
 
 
