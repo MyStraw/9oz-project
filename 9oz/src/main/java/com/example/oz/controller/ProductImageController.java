@@ -163,7 +163,7 @@ public class ProductImageController {
     	System.out.println("predictImage " + payload);
     	
         // 이미지 파일을 읽는 코드는 여기에 위치해야 합니다. (예: byte[] imageData = ...)
-        byte[] imageData = null; 
+        byte[] imageData = null;
         try {
             imageData = Files.readAllBytes(Paths.get(imageName)); // 이미지 파일을 읽는다.
             System.out.println("predictImage " + payload);
