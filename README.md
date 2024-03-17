@@ -1,5 +1,8 @@
 # 9oz-project
 
+## 결과보고서 링크
+[결과보고서](https://daffodil-den-fe1.notion.site/c4ab3c5bb77b409bb756f959abb68660?pvs=4)
+
 ### -용어집-
 
 <aside>
